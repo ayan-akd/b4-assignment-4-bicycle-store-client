@@ -4,7 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
-import CustomFooter from "./customFooter";
+import CustomFooter from "./CustomFooter";
 
 const MainLayout = () => {
   const token = useAppSelector(useCurrentToken);

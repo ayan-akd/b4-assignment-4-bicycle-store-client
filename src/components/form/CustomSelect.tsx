@@ -10,6 +10,7 @@ type TSelectProps = {
   watch?: boolean;
   mode?: "multiple" | undefined;
   onValueChange?: (value: string) => void;
+  placeholder?: string;
 };
 
 export default function CustomSelect({
@@ -20,6 +21,7 @@ export default function CustomSelect({
   mode,
   watch,
   onValueChange,
+  placeholder
 }: TSelectProps) {
   const { control } = useFormContext();
   const inputValue = useWatch({
@@ -41,6 +43,7 @@ export default function CustomSelect({
         <Form.Item label={label}>
           <Select
             mode={mode}
+            placeholder={placeholder}
             variant="filled"
             style={{ width: "100%" }}
             size="large"

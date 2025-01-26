@@ -1,0 +1,78 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Badge, Button, Card, Image, Typography } from "antd";
+import { TProduct, TResponse } from "@/types";
+import { useNavigate } from "react-router-dom";
+import ConfirmToast from "@/components/ui/ConfirmToast";
+import { useDeleteProductMutation } from "@/redux/features/admin/productManagement.api";
+import NotificationToast from "@/components/ui/NotificationToast";
+
+const { Title } = Typography;
+
+type ProductCardProps = {
+  product: TProduct;
+};
+
+const ProductCard = ({ product }: ProductCardProps) => {
+  const navigate = useNavigate();
+  const [deleteProduct] = useDeleteProductMutation();
+  const { name, price, image, description, _id } = product;
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = (await deleteProduct(id)) as TResponse<any>;
+      if (res.data) {
+        NotificationToast({
+          message: "Product added successfully",
+          type: "success",
+          toastId: "2",
+        });
+      } else if (res.error) {
+        NotificationToast({
+          message: res.error.data.message,
+          type: "error",
+          toastId: "2",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <div>
+      <Badge.Ribbon text={`$${price}`} color="blue">
+        <Card
+          hoverable
+          className="w-full sm:w-[300px] overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300"
+          cover={
+            <Image
+              alt={name}
+              src={image}
+              className="w-full h-full object-cover"
+            />
+          }
+        >
+          <Title level={4}>{name}</Title>
+          <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+            {description}
+          </p>
+          <div className="flex gap-2 mt-4">
+            <Button type="primary" onClick={() => navigate(`/product/${_id}`)}>
+              View Details
+            </Button>
+
+            <ConfirmToast
+              buttonText="Delete"
+              onConfirm={() => handleDelete(_id)}
+              title="Delete Product"
+              description="Are you sure you want to delete this product?"
+              danger={true}
+            />
+          </div>
+        </Card>
+      </Badge.Ribbon>
+    </div>
+  );
+};
+
+export default ProductCard;

@@ -14,11 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLoginMutation, useRegisterMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
+import { loginSchema, registerSchema } from "@/schemas/authSchemas";
 import { TResponse, TUser } from "@/types";
 import { verifyToken } from "@/utils/verifyToken";
 import { Button } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Login() {
     const dispatch = useAppDispatch();
@@ -35,7 +37,6 @@ export default function Login() {
     try {
       const res = await login(data).unwrap() as TResponse<any>;
       const user = verifyToken(res.data.accessToken) as TUser;
-      console.log(user);
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       if (res.data) {
         NotificationToast({
@@ -107,7 +108,10 @@ export default function Login() {
             <CardHeader>
               <CardTitle className="text-center">Login</CardTitle>
             </CardHeader>
-            <CustomForm onSubmit={onLoginSubmit}>
+            <CustomForm 
+            onSubmit={onLoginSubmit}
+            resolver={zodResolver(loginSchema)}
+            >
               <CardContent className="space-y-1">
                 <div className="space-y-1">
                   <CustomInput
@@ -137,7 +141,10 @@ export default function Login() {
             <CardHeader>
               <CardTitle className="text-center">Register</CardTitle>
             </CardHeader>
-            <CustomForm onSubmit={onRegisterSubmit}>
+            <CustomForm 
+            onSubmit={onRegisterSubmit}
+            resolver={zodResolver(registerSchema)}
+            >
               <CardContent className="space-y-1">
                 <div className="space-y-1">
                   <CustomInput

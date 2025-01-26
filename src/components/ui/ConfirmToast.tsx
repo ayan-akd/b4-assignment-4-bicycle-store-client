@@ -9,6 +9,7 @@ interface ConfirmToastProps {
   onCancel?: () => void;
   buttonText: string | ReactNode;
   buttonType?: "default" | "primary" | "dashed" | "link" | "text";
+  danger?: boolean;
 }
 
 const ConfirmToast: React.FC<ConfirmToastProps> = ({
@@ -18,6 +19,7 @@ const ConfirmToast: React.FC<ConfirmToastProps> = ({
   onCancel,
   buttonText,
   buttonType = "primary",
+  danger = false,
 }) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -61,7 +63,7 @@ const ConfirmToast: React.FC<ConfirmToastProps> = ({
       okButtonProps={{ loading: confirmLoading }}
       onCancel={handleCancel}
     >
-      <Button type={buttonType} onClick={showPopconfirm}>
+      <Button type={buttonType} onClick={showPopconfirm} danger={danger}>
         {buttonText}
       </Button>
     </Popconfirm>

@@ -61,6 +61,7 @@ export default function Sidebar() {
         position: "sticky",
         left: 0,
         top: 0,
+        zIndex: 100,
       }}
     >
       <Link to="/">

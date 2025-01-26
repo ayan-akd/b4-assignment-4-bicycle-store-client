@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form";
-import { Form } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { Form, InputNumber } from "antd";
 
 type TInputProps = {
   name: string;
@@ -8,18 +7,19 @@ type TInputProps = {
   disabled?: boolean;
   placeholder?: string;
 };
-export default function CustomTextArea({ name, label, disabled, placeholder }: TInputProps) {
+export default function CustomNumberInput({ name, label, disabled, placeholder }: TInputProps) {
   return (
     <div>
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => (
           <Form.Item label={label}>
-            <TextArea
+            <InputNumber
               variant="filled"
               {...field}
               id={name}
               size="large"
+              style={{ width: "100%" }}
               disabled={disabled}
               placeholder={placeholder}
             />

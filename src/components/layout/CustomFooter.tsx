@@ -6,7 +6,7 @@ export default function CustomFooter() {
           <nav className="flex flex-wrap justify-center -mx-5 -my-2">
             <div className="px-5 py-2">
               <a
-                href="#"
+                href="/about"
                 className="text-base leading-6 text-gray-500 hover:text-gray-900"
               >
                 About
@@ -127,7 +127,7 @@ export default function CustomFooter() {
             </a>
           </div>
           <p className="mt-8 text-base leading-6 text-center text-gray-400">
-            © 2021 BicycleStore, Inc. All rights reserved.
+          ©{new Date().getFullYear()} BicycleStore, Inc. All rights reserved.
           </p>
         </div>
       </section>

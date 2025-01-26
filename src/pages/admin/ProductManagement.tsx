@@ -1,7 +1,38 @@
+import AddProductModal from "@/components/modal/AddProductModal";
+import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement.api";
+import { TProduct, TQueryParams } from "@/types";
+import { useState } from "react";
+import ProductCard from "./ProductCard";
+import { Spin } from "antd";
+
 export default function ProductManagement() {
-    return (
-        <div>
-            <h1>This is the ProductManagement component</h1>
+  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const { data: productsData, isFetching } = useGetAllProductsQuery([
+    ...params,
+    { name: "limit", value: limit },
+    { name: "page", value: page },
+    { name: "searchTerm", value: searchTerm },
+  ]);
+  return (
+    <div>
+      <h1 className="text-center text-xl font-bold">Manage Products</h1>
+      <div className="flex justify-end my-5 mr-5">
+        <AddProductModal />
+      </div>
+      {isFetching ? (
+        <div className="flex justify-center items-center h-screen">
+          <Spin size="large" />
         </div>
-    );
+      ) : (
+        <div className="md:flex space-y-3 flex-wrap gap-5 justify-center items-center">
+          {productsData?.data?.map((product: TProduct) => (
+            <ProductCard key={product?._id} product={product} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
