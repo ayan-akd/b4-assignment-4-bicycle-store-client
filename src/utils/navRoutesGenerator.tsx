@@ -25,10 +25,12 @@ const navRouteGenerator = (
     }));
 
   if (token) {
-    navItems.push({
+    const dashboardItem: TSidebarRoute = {
       key: "dashboard",
       label: <NavLink to={`/${user?.role}/dashboard`}>Dashboard</NavLink>,
-    });
+    };
+
+    navItems.splice(2, 0, dashboardItem);
   }
 
   return navItems;

@@ -11,12 +11,12 @@ const adminPaths: TUserPaths[] = [
     element: <AdminDashboard />,
   },
   {
-    name: "User Management",
+    name: "Manage Users",
     path: "users",
     element: <UserManagement />,
   },
   {
-    name: "Product Management",
+    name: "Manage Products",
     path: "products",
     element: <ProductManagement />,
   },

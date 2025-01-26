@@ -9,6 +9,8 @@ import sidebarItemGenerator from "../../utils/sidebarItemGenerator";
 import adminPaths from "../../routes/adminRoutes";
 import userPaths from "../../routes/userRoutes";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { RiMenuFold4Fill, RiMenuFold3Fill } from "react-icons/ri";
 
 const userRole = {
   ADMIN: "admin",
@@ -16,6 +18,7 @@ const userRole = {
 };
 
 export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
   const token = useAppSelector(useCurrentToken);
   let user;
   if (token) {
@@ -46,8 +49,13 @@ export default function Sidebar() {
   }
   return (
     <Sider
-      breakpoint="lg"
+      translate="yes"
+      breakpoint="md"
       collapsedWidth="0"
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
       style={{
         height: "100vh",
         position: "sticky",
@@ -56,12 +64,30 @@ export default function Sidebar() {
       }}
     >
       <Link to="/">
-        <div className="text-xl font-bold m-5 text-white">Bicycle Store</div>
+        <div className="text-xl font-bold m-5 text-white">Pedal Paradise</div>
       </Link>
+      <div
+        className="block md:hidden z-50"
+        style={{
+          position: "absolute",
+          top: "4%",
+          transform: "translateY(-50%)",
+          left: collapsed ? "5px" : "190px",
+          transition: "left 0.3s",
+          zIndex: 10,
+        }}
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        {collapsed ? (
+          <RiMenuFold4Fill className="text-4xl text-blue-700" />
+        ) : (
+          <RiMenuFold3Fill className="text-4xl text-blue-700" />
+        )}
+      </div>
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["4"]}
+        defaultSelectedKeys={[`Dashboard`]}
         items={sidebarItems}
       />
     </Sider>

@@ -4,6 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
+import CustomFooter from "./customFooter";
 
 const MainLayout = () => {
   const token = useAppSelector(useCurrentToken);
@@ -13,10 +14,10 @@ const MainLayout = () => {
   };
   return (
     <Layout style={{ minHeight: "100%" }}>
-      <Header>
+      <Header className="px-5 md:px-10">
         <div className="flex justify-around items-center gap-2">
           <NavLink to="/">
-            <div className="text-xl font-bold text-white">Bicycle Store</div>
+            <div className="text-xl font-bold text-white">Pedal Paradise</div>
           </NavLink>
           <Navbar />
           {token ? (
@@ -34,7 +35,7 @@ const MainLayout = () => {
         </div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        <CustomFooter />
       </Footer>
     </Layout>
   );
