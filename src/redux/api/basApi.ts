@@ -7,12 +7,12 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { toast } from "sonner";
 import { RootState } from "../store";
 import { logOut, setUser } from "../features/auth/authSlice";
+import NotificationToast from "@/components/ui/NotificationToast";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/v1",
+  baseUrl: "http://localhost:5000/api/",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -31,13 +31,21 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 404) {
-    toast.error((result?.error?.data as { message: string })?.message);
+    NotificationToast({
+      toastId: "error",
+      type: "error",
+      message: (result?.error?.data as { message: string })?.message,
+    });
   }
   if (result?.error?.status === 403) {
-    toast.error((result?.error?.data as { message: string })?.message);
+    NotificationToast({
+      toastId: "error",
+      type: "error",
+      message: (result?.error?.data as { message: string })?.message,
+    });
   }
   if (result?.error?.status === 401) {
-    const res = await fetch("http://localhost:5000/api/v1/auth/refresh-token", {
+    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });

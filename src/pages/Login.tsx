@@ -1,73 +1,173 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import CustomForm from "@/components/form/CustomForm";
+import CustomInput from "@/components/form/CustomInput";
+import CustomPassword from "@/components/form/CustomPassword";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from "antd"
+} from "@/components/ui/card";
+import NotificationToast from "@/components/ui/NotificationToast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLoginMutation, useRegisterMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { TResponse, TUser } from "@/types";
+import { verifyToken } from "@/utils/verifyToken";
+import { Button } from "antd";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+  const [register] = useRegisterMutation();
+  const [login] = useLoginMutation();
+  const onLoginSubmit: SubmitHandler<FieldValues> = async (data) => {
+    NotificationToast({
+      message: "Logging in...",
+      type: "loading",
+      toastId: "1",
+    });
+    try {
+      const res = await login(data).unwrap() as TResponse<any>;
+      const user = verifyToken(res.data.accessToken) as TUser;
+      console.log(user);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+      if (res.data) {
+        NotificationToast({
+          message: "Login successful",
+          type: "success",
+          toastId: "2",
+          destroyId: "1",
+        });
+        navigate(location.state || `/${user?.role}/dashboard`);
+      }
+      if (res.error) {
+        NotificationToast({
+          message: res.error.data.message,
+          type: "error",
+          toastId: "2",
+          destroyId: "1",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const onRegisterSubmit: SubmitHandler<FieldValues> = async (data) => {
+    NotificationToast({
+      message: "Registering...",
+      type: "loading",
+      toastId: "1",
+    });
+    const userInfo = {
+      ...data,
+      role: "customer",
+    };
+    try {
+      const res = (await register(userInfo)) as TResponse<any>;
+      if (res.data) {
+        NotificationToast({
+          message: "Registration successful",
+          type: "success",
+          toastId: "2",
+          destroyId: "1",
+        });
+      }
+      if (res.error) {
+        NotificationToast({
+          message: res.error.data.message,
+          type: "error",
+          toastId: "2",
+          destroyId: "1",
+        });
+      }
+    } catch {
+      NotificationToast({
+        message: "Invalid credentials",
+        type: "error",
+        toastId: "2",
+        destroyId: "1",
+      });
+    }
+  };
   return (
     <div className="flex items-center justify-center h-screen">
-        <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account">Login</TabsTrigger>
-        <TabsTrigger value="password">Register</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Account</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" defaultValue="@peduarte" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save changes</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-      <TabsContent value="password">
-        <Card>
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-    </Tabs>
+      <Tabs defaultValue="login" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="login">Login</TabsTrigger>
+          <TabsTrigger value="register">Register</TabsTrigger>
+        </TabsList>
+        <TabsContent value="login">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">Login</CardTitle>
+            </CardHeader>
+            <CustomForm onSubmit={onLoginSubmit}>
+              <CardContent className="space-y-1">
+                <div className="space-y-1">
+                  <CustomInput
+                    name="email"
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email address"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <CustomPassword
+                    name="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button htmlType="submit">Login</Button>
+              </CardFooter>
+            </CustomForm>
+          </Card>
+        </TabsContent>
+        {/*  Register */}
+        <TabsContent value="register">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">Register</CardTitle>
+            </CardHeader>
+            <CustomForm onSubmit={onRegisterSubmit}>
+              <CardContent className="space-y-1">
+                <div className="space-y-1">
+                  <CustomInput
+                    name="name"
+                    type="text"
+                    label="Name"
+                    placeholder="Enter your name"
+                  />
+                  <CustomInput
+                    name="email"
+                    type="email"
+                    label="Email"
+                    placeholder="Enter your email address"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <CustomPassword
+                    name="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button htmlType="submit">Register</Button>
+              </CardFooter>
+            </CustomForm>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
-  )
+  );
 }

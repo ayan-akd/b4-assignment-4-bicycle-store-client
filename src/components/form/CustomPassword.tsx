@@ -5,8 +5,9 @@ type TInputProps = {
   name: string;
   label?: string;
   disabled?: boolean;
+  placeholder?: string;
 };
-export default function CustomPassword({  name, label, disabled }: TInputProps) {
+export default function CustomPassword({  name, label, disabled, placeholder }: TInputProps) {
   return (
     <div>
       <Controller
@@ -19,6 +20,7 @@ export default function CustomPassword({  name, label, disabled }: TInputProps) 
               id={name}
               size="large"
               disabled={disabled}
+              placeholder={placeholder}
             />
             {error && <small style={{ color: "red" }}>{error.message}</small>}
           </Form.Item>

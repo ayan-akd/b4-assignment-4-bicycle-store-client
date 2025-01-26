@@ -7,7 +7,6 @@ import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
 
 const MainLayout = () => {
   const token = useAppSelector(useCurrentToken);
-
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logOut());
@@ -24,7 +23,7 @@ const MainLayout = () => {
             <Button onClick={handleLogout}>Logout</Button>
           ) : (
             <NavLink to="/login">
-              <Button size="small">Login</Button>
+              <Button>Login</Button>
             </NavLink>
           )}
         </div>

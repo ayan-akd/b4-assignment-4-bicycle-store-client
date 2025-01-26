@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { Button, Layout } from "antd";
 import Sidebar from "./Sidebar";
 import { Header } from "antd/es/layout/layout";
@@ -9,7 +9,6 @@ import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
 const { Content } = Layout;
 const DashboardLayout = () => {
   const token = useAppSelector(useCurrentToken);
-
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logOut());
@@ -21,17 +20,12 @@ const DashboardLayout = () => {
         <Layout>
           <Header>
             <div className="flex justify-around items-center gap-2">
-              <Link to="/">
-                <div className="text-xl font-bold text-white">
-                  Bicycle Store
-                </div>
-              </Link>
               <Navbar />
               {token ? (
                 <Button onClick={handleLogout}>Logout</Button>
               ) : (
                 <NavLink to="/login">
-                  <Button size="small">Login</Button>
+                  <Button >Login</Button>
                 </NavLink>
               )}
             </div>

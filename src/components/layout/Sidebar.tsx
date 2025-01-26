@@ -8,6 +8,7 @@ import { TUser } from "../../types";
 import sidebarItemGenerator from "../../utils/sidebarItemGenerator";
 import adminPaths from "../../routes/adminRoutes";
 import userPaths from "../../routes/userRoutes";
+import { Link } from "react-router-dom";
 
 const userRole = {
   ADMIN: "admin",
@@ -54,6 +55,9 @@ export default function Sidebar() {
         top: 0,
       }}
     >
+      <Link to="/">
+        <div className="text-xl font-bold m-5 text-white">Bicycle Store</div>
+      </Link>
       <Menu
         theme="dark"
         mode="inline"
