@@ -129,7 +129,7 @@ export default function UserManagement() {
             onClick={() => setUserId(record.key)}
             className="hover:opacity-90"
           >
-            Update Status
+            Update
           </Button>
         </Dropdown>
       ),

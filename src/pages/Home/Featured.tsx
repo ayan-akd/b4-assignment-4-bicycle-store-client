@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function Featured() {
   const { data: productsData, isFetching } = useGetAllProductsQuery(undefined);
-  const featuredProducts = productsData?.data?.slice(0, 5);
+  const featuredProducts = productsData?.data?.slice(0, 4);
   return (
     <div>
       <h1 className="text-center text-4xl mt-20 mb-10 font-bold">

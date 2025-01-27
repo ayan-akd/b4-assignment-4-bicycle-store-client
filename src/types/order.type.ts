@@ -1,6 +1,13 @@
 import { TUserData } from "./global.type";
 import { TProduct } from "./product.type";
 
+export type TOrderStatus =
+  | "pending"
+  | "shipped"
+  | "delivered"
+  | "cancelled"
+  | "processing";
+
 export type TOrder = {
   _id: string;
   orderId: string;
@@ -8,6 +15,7 @@ export type TOrder = {
   product: TProduct;
   address: string;
   quantity: number;
+  status: TOrderStatus;
   totalPrice: number;
   createdAt: string;
   updatedAt: string;

@@ -1,4 +1,8 @@
-import { useGetAllOrdersQuery } from "@/redux/features/order/orderManagement.api";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
+} from "@/redux/features/order/orderManagement.api";
 import { TOrder } from "@/types/order.type";
 import {
   Empty,
@@ -8,20 +12,91 @@ import {
   Typography,
   Card,
   Tag,
+  Dropdown,
+  Button,
 } from "antd";
 import { DollarCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { EditOutlined } from "@ant-design/icons";
+import NotificationToast from "@/components/ui/NotificationToast";
+import { TResponse } from "@/types";
+
+const statusItems = [
+  {
+    label: "Pending",
+    key: "pending",
+  },
+  {
+    label: "Processing",
+    key: "processing",
+  },
+  {
+    label: "Shipped",
+    key: "shipped",
+  },
+  {
+    label: "Delivered",
+    key: "delivered",
+  },
+  {
+    label: "Cancelled",
+    key: "cancelled",
+  },
+];
 
 export default function OrderManagement() {
+  const [orderId, setOrderId] = useState("");
   const { data: ordersData, isFetching } = useGetAllOrdersQuery(undefined);
-
+  const [updateStatus] = useUpdateOrderStatusMutation();
   const tableData = ordersData?.data?.map((order: TOrder) => ({
     key: order._id,
+    _id: order._id,
     orderId: order.orderId,
     customer: order.user.name,
     lPrice: order.totalPrice,
     quantity: order.quantity,
     product: order.product.name,
+    status: order.status,
   }));
+
+  const handleStatusChange = async ( value: any) => {
+    NotificationToast({
+      message: "Updating Order status...",
+      type: "loading",
+      toastId: "loading",
+    });
+    const updatedData = {
+      id: orderId,
+      data: {
+        status: value.key,
+      },
+    };
+    try {
+      const res = (await updateStatus(updatedData)) as TResponse<any>;
+      if (res.data) {
+        NotificationToast({
+          message: "Order status updated successfully",
+          type: "success",
+          toastId: "2",
+          destroyId: "loading",
+        });
+      } else if (res.error) {
+        NotificationToast({
+          message: res.error.data.message,
+          type: "error",
+          toastId: "2",
+          destroyId: "loading",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const menuProps = {
+    items: statusItems,
+    onClick: handleStatusChange,
+  };
 
   const columns: TableColumnsType<TOrder> = [
     {
@@ -70,6 +145,40 @@ export default function OrderManagement() {
         </Tag>
       ),
     },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        const statusColors = {
+          pending: "orange",
+          processing: "blue",
+          shipped: "cyan",
+          delivered: "green",
+          cancelled: "red",
+        };
+        return (
+          <Tag color={statusColors[status as keyof typeof statusColors]}>
+            {status.toUpperCase()}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "Actions",
+      render: (record) => (
+        <Dropdown menu={menuProps} trigger={["click"]}>
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => setOrderId(record.key)}
+            className="hover:opacity-90"
+          >
+            Update
+          </Button>
+        </Dropdown>
+      ),
+    },
   ];
 
   if (isFetching) {
@@ -107,14 +216,14 @@ export default function OrderManagement() {
             Manage and track all customer orders
           </p>
         </div>
-        
+
         <Table<TOrder>
           columns={columns}
           dataSource={tableData}
           style={{ overflow: "auto" }}
           pagination={{
             pageSize: 10,
-            showTotal: (total, range) => 
+            showTotal: (total, range) =>
               `${range[0]}-${range[1]} of ${total} orders`,
             showSizeChanger: true,
             showQuickJumper: true,

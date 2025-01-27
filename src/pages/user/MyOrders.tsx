@@ -23,6 +23,7 @@ export default function MyOrders() {
       lPrice: order.totalPrice,
       quantity: order.quantity,
       product: order.product.name,
+      status: order.status,
     }));
 
     const columns: TableColumnsType<TOrder> = [
@@ -63,6 +64,25 @@ export default function MyOrders() {
             <DollarCircleOutlined /> ${price}
           </Tag>
         ),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        render: (status) => {
+          const statusColors = {
+            pending: "orange",
+            processing: "blue",
+            shipped: "cyan",
+            delivered: "green",
+            cancelled: "red",
+          };
+          return (
+            <Tag color={statusColors[status as keyof typeof statusColors]}>
+              {status.toUpperCase()}
+            </Tag>
+          );
+        },
       },
     ];
 

@@ -7,7 +7,7 @@ import { useDeleteProductMutation } from "@/redux/features/admin/productManageme
 import NotificationToast from "@/components/ui/NotificationToast";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 const { Title } = Typography;
 
@@ -20,7 +20,7 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
   const navigate = useNavigate();
   const [deleteProduct] = useDeleteProductMutation();
   const user = useAppSelector(useCurrentUser);
-  const { name, price, image, description, _id, category } = product;
+  const { name, price, image, description, _id, category, brand } = product;
 
   const handleDelete = async (id: string) => {
     try {
@@ -45,9 +45,9 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
 
   return (
     <motion.div
-    whileHover={{ y: -10 }}
-    transition={{ duration: 0.3 }}
-    className=" rounded-2xl shadow-xl"
+      whileHover={{ y: -10 }}
+      transition={{ duration: 0.3 }}
+      className=" rounded-2xl shadow-xl"
     >
       <Badge.Ribbon text={`$${price}`} color="blue">
         <Card
@@ -66,6 +66,9 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
           </Title>
           <Tag color="green" className="mb-2">
             {category}
+          </Tag>
+          <Tag color="blue" className="mb-2 ml-2">
+            {brand}
           </Tag>
           <p
             title={description}
