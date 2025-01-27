@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import DashboardLayout from "../components/layout/DashboardLayout";
-import UserDashboard from "../pages/user/UserDashboard";
 import { routesGenerator } from "../utils/routesGenerator";
 import mainRoutes from "./mainRoutes";
 import adminPaths from "./adminRoutes";
 import ErrorPage from "@/pages/ErrorPage";
+import userPaths from "./userRoutes";
 
  const router = createBrowserRouter([
   {
@@ -20,14 +20,9 @@ import ErrorPage from "@/pages/ErrorPage";
     children: routesGenerator(adminPaths),
   },
   {
-    path: "/users",
+    path: "/user",
     element: <DashboardLayout />,
-    children: [
-      {
-        path: "users/dashboard",
-        element: <UserDashboard />,
-      },
-    ],
+    children: routesGenerator(userPaths)
   },
 ]);
 

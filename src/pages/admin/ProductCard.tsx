@@ -5,16 +5,20 @@ import { useNavigate } from "react-router-dom";
 import ConfirmToast from "@/components/ui/ConfirmToast";
 import { useDeleteProductMutation } from "@/redux/features/admin/productManagement.api";
 import NotificationToast from "@/components/ui/NotificationToast";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const { Title } = Typography;
 
 type ProductCardProps = {
   product: TProduct;
+  management?: boolean;
 };
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, management }: ProductCardProps) => {
   const navigate = useNavigate();
   const [deleteProduct] = useDeleteProductMutation();
+  const user = useAppSelector(selectCurrentUser);
   const { name, price, image, description, _id } = product;
 
   const handleDelete = async (id: string) => {
@@ -52,8 +56,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             />
           }
         >
-          <Title level={4}>{name}</Title>
-          <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+          <Title title={name} className="line-clamp-1" level={4}>{name}</Title>
+          <p title={description} className="text-gray-600 text-sm line-clamp-2 mb-4">
             {description}
           </p>
           <div className="flex gap-2 mt-4">
@@ -61,13 +65,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
               View Details
             </Button>
 
-            <ConfirmToast
-              buttonText="Delete"
-              onConfirm={() => handleDelete(_id)}
-              title="Delete Product"
-              description="Are you sure you want to delete this product?"
-              danger={true}
-            />
+            {user?.role === "admin" && management && (
+              <ConfirmToast
+                buttonText="Delete"
+                onConfirm={() => handleDelete(_id)}
+                title="Delete Product"
+                description="Are you sure you want to delete this product?"
+                danger={true}
+              />
+            )}
           </div>
         </Card>
       </Badge.Ribbon>

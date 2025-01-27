@@ -67,7 +67,7 @@ export default function Login() {
     });
     const userInfo = {
       ...data,
-      role: "customer",
+      role: "user",
     };
     try {
       const res = (await register(userInfo)) as TResponse<any>;

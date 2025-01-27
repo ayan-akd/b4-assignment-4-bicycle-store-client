@@ -1,4 +1,4 @@
-export type TRole = "admin" | "customer";
+export type TRole = "admin" | "user";
 
 import { BaseQueryApi } from "@reduxjs/toolkit/query";
 

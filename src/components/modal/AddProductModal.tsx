@@ -47,6 +47,7 @@ const AddProductModal: React.FC = () => {
           toastId: "2",
           destroyId: "1",
         });
+        onClose();
       } else if (res.error) {
         NotificationToast({
           message: res.error.data.message,

@@ -18,7 +18,7 @@ export default function ProductManagement() {
   ]);
   return (
     <div>
-      <h1 className="text-center text-xl font-bold">Manage Products</h1>
+      <h1 className="text-center text-4xl font-bold">Manage Products</h1>
       <div className="flex justify-end my-5 mr-5">
         <AddProductModal />
       </div>
@@ -27,9 +27,13 @@ export default function ProductManagement() {
           <Spin size="large" />
         </div>
       ) : (
-        <div className="md:flex space-y-3 flex-wrap gap-5 justify-center items-center">
+        <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0  items-center">
           {productsData?.data?.map((product: TProduct) => (
-            <ProductCard key={product?._id} product={product} />
+            <ProductCard
+              key={product?._id}
+              product={product}
+              management={true}
+            />
           ))}
         </div>
       )}
