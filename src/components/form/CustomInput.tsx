@@ -7,8 +7,9 @@ type TInputProps = {
   label?: string;
   disabled?: boolean;
   placeholder?: string;
+  readonly?: boolean;
 };
-export default function CustomInput({ type, name, label, disabled, placeholder }: TInputProps) {
+export default function CustomInput({ type, name, label, disabled, placeholder, readonly }: TInputProps) {
   return (
     <div>
       <Controller
@@ -23,6 +24,7 @@ export default function CustomInput({ type, name, label, disabled, placeholder }
               size="large"
               disabled={disabled}
               placeholder={placeholder}
+              readOnly={readonly}
             />
             {error && <small style={{ color: "red" }}>{error.message}</small>}
           </Form.Item>

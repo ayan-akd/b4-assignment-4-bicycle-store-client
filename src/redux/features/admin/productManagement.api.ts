@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { baseApi } from "@/redux/api/basApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { TQueryParams, TResponseRedux } from "../../../types/global.type";
 
 const productManagementApi = baseApi.injectEndpoints({
@@ -57,7 +57,7 @@ const productManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["products", "product"],
-    })
+    }),
   }),
 });
 

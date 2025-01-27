@@ -20,7 +20,7 @@ import {
   ToolOutlined,
 } from "@ant-design/icons";
 import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import EditProductModal from "@/components/modal/EditProductModal";
 
 const { Title, Text, Paragraph } = Typography;
@@ -28,7 +28,7 @@ const { Title, Text, Paragraph } = Typography;
 export default function ProductDetails() {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const user = useAppSelector(selectCurrentUser);
+  const user = useAppSelector(useCurrentUser);
   const { data, isFetching } = useGetSingleProductQuery(productId);
 
   if (isFetching) {
@@ -40,7 +40,7 @@ export default function ProductDetails() {
   }
 
   const product = data?.data;
-  const { name, price, image, description } = product;
+  const { name, price, image, description, category, _id } = product;
 
   return (
     <div
@@ -110,6 +110,9 @@ export default function ProductDetails() {
               <Title level={1} style={{ marginBottom: "16px" }}>
                 {name}
               </Title>
+              <Tag color="green" className="mb-2">
+                {category}
+              </Tag>
 
               <Title
                 level={2}
@@ -195,11 +198,12 @@ export default function ProductDetails() {
                   type="primary"
                   size="large"
                   icon={<ShoppingCartOutlined />}
-                  style={{  marginTop: "24px" }}
+                  style={{ marginTop: "24px" }}
+                  onClick={() => navigate(`/checkout/${_id}`)}
                 >
                   Buy Now
                 </Button>
-                {user?.role === 'admin' && (
+                {user?.role === "admin" && (
                   <EditProductModal product={product} />
                 )}
               </div>

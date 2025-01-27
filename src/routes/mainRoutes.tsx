@@ -3,9 +3,9 @@ import AllProducts from "../pages/user/AllProducts";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ProductDetails from "../pages/user/ProductDetails";
-import Order from "../pages/user/Order";
 import { TUserPaths } from "../types";
 import About from "../pages/About";
+import Checkout from "@/pages/user/Checkout";
 
 const mainRoutes: TUserPaths[] = [
   {
@@ -24,9 +24,9 @@ const mainRoutes: TUserPaths[] = [
     element: <ProductDetails />,
   },
   {
-    name: "Orders",
-    path: "orders",
-    element: <Order />,
+    name: "Checkout",
+    path: "checkout/:productId",
+    element: <Checkout />,
   },
   {
     name: "Login",

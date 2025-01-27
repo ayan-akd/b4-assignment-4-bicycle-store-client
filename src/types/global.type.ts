@@ -40,4 +40,15 @@ export type TUser = {
     iat: number;
     exp: number;
   };
+
+  export type TUserData = {
+    name: string;
+    id: string;
+    role: string;
+    email: string;
+    _id: string;
+    status: string;
+    createdAt: string;
+  };
+  
   

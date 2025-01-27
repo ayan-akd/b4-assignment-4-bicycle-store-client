@@ -2,13 +2,16 @@ import { Menu } from "antd";
 import navRouteGenerator from "../../utils/navRoutesGenerator";
 import mainRoutes from "../../routes/mainRoutes";
 import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentUser, useCurrentToken } from "@/redux/features/auth/authSlice";
+import {
+  useCurrentUser,
+  useCurrentToken,
+} from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
-    const token = useAppSelector(useCurrentToken);
-    const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(useCurrentToken);
+  const user = useAppSelector(useCurrentUser);
 
-    const navItems = navRouteGenerator(mainRoutes, token, user);
+  const navItems = navRouteGenerator(mainRoutes, token, user);
   return (
     <Menu
       theme="dark"

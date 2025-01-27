@@ -3,19 +3,15 @@ import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement
 import { TProduct, TQueryParams } from "@/types";
 import { useState } from "react";
 import ProductCard from "./ProductCard";
-import { Spin } from "antd";
+import { Pagination, Spin } from "antd";
 
 export default function ProductManagement() {
   const [params, setParams] = useState<TQueryParams[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
-    { name: "limit", value: limit },
-    { name: "page", value: page },
-    { name: "searchTerm", value: searchTerm },
+    { name: "limit", value: "8" },
   ]);
+
   return (
     <div>
       <h1 className="text-center text-4xl font-bold">Manage Products</h1>
@@ -27,6 +23,7 @@ export default function ProductManagement() {
           <Spin size="large" />
         </div>
       ) : (
+        <>
         <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0  items-center">
           {productsData?.data?.map((product: TProduct) => (
             <ProductCard
@@ -36,6 +33,17 @@ export default function ProductManagement() {
             />
           ))}
         </div>
+        <div className="flex justify-center my-8">
+            <Pagination
+              current={productsData?.meta?.page}
+              total={productsData?.meta?.totalDocuments}
+              pageSize={productsData?.meta?.limit}
+              onChange={(newPage) => setParams([{ name: "page", value: newPage.toString() }])}
+              showSizeChanger={false}
+            />
+          </div>
+        </>
+        
       )}
     </div>
   );

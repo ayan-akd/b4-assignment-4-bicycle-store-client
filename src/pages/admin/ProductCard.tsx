@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Badge, Button, Card, Image, Typography } from "antd";
+import { Badge, Button, Card, Image, Tag, Typography } from "antd";
 import { TProduct, TResponse } from "@/types";
 import { useNavigate } from "react-router-dom";
 import ConfirmToast from "@/components/ui/ConfirmToast";
 import { useDeleteProductMutation } from "@/redux/features/admin/productManagement.api";
 import NotificationToast from "@/components/ui/NotificationToast";
 import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 const { Title } = Typography;
 
@@ -18,8 +18,8 @@ type ProductCardProps = {
 const ProductCard = ({ product, management }: ProductCardProps) => {
   const navigate = useNavigate();
   const [deleteProduct] = useDeleteProductMutation();
-  const user = useAppSelector(selectCurrentUser);
-  const { name, price, image, description, _id } = product;
+  const user = useAppSelector(useCurrentUser);
+  const { name, price, image, description, _id, category } = product;
 
   const handleDelete = async (id: string) => {
     try {
@@ -56,8 +56,16 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
             />
           }
         >
-          <Title title={name} className="line-clamp-1" level={4}>{name}</Title>
-          <p title={description} className="text-gray-600 text-sm line-clamp-2 mb-4">
+          <Title title={name} className="line-clamp-1" level={4}>
+            {name}
+          </Title>
+          <Tag color="green" className="mb-2">
+            {category}
+          </Tag>
+          <p
+            title={description}
+            className="text-gray-600 text-sm line-clamp-2 mb-4"
+          >
             {description}
           </p>
           <div className="flex gap-2 mt-4">
