@@ -20,6 +20,7 @@ import { useState } from "react";
 import { EditOutlined } from "@ant-design/icons";
 import NotificationToast from "@/components/ui/NotificationToast";
 import { TResponse } from "@/types";
+import { Column, Pie } from "@ant-design/charts";
 
 const statusItems = [
   {
@@ -44,6 +45,11 @@ const statusItems = [
   },
 ];
 
+type ChartDataItem = {
+  name: string;
+  value: number;
+};
+
 export default function OrderManagement() {
   const [orderId, setOrderId] = useState("");
   const { data: ordersData, isFetching } = useGetAllOrdersQuery(undefined);
@@ -59,7 +65,7 @@ export default function OrderManagement() {
     status: order.status,
   }));
 
-  const handleStatusChange = async ( value: any) => {
+  const handleStatusChange = async (value: any) => {
     NotificationToast({
       message: "Updating Order status...",
       type: "loading",
@@ -91,6 +97,38 @@ export default function OrderManagement() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const calculateMetrics = () => {
+    if (!ordersData?.data)
+      return { totalRevenue: 0, totalUnits: 0, productSales: [] };
+
+    const totalRevenue = ordersData.data.reduce(
+      (acc: number, order: TOrder) => acc + order.totalPrice,
+      0
+    );
+    const totalUnits = ordersData.data.reduce(
+      (acc: number, order: TOrder) => acc + order.quantity,
+      0
+    );
+
+    const salesByProduct = ordersData.data.reduce(
+      (acc: { [key: string]: number }, order: TOrder) => {
+        const productName = order.product.name;
+        acc[productName] = (acc[productName] || 0) + order.quantity;
+        return acc;
+      },
+      {}
+    );
+
+    const productSales: ChartDataItem[] = Object.entries(salesByProduct).map(
+      ([name, value]) => ({
+        name,
+        value: value as number,
+      })
+    );
+
+    return { totalRevenue, totalUnits, productSales };
   };
 
   const menuProps = {
@@ -232,6 +270,58 @@ export default function OrderManagement() {
           bordered
         />
       </Card>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card title="Sales Overview" className="shadow-md">
+          <div className="text-center mb-4">
+            <Typography.Title level={4}>Total Revenue</Typography.Title>
+            <Typography.Title level={2}>
+              ${calculateMetrics().totalRevenue}
+            </Typography.Title>
+            <Typography.Title level={4}>Units Sold</Typography.Title>
+            <Typography.Title level={2}>
+              {calculateMetrics().totalUnits}
+            </Typography.Title>
+          </div>
+        </Card>
+
+        <Card title="Top Selling Products" className="shadow-md">
+          <Pie
+            data={calculateMetrics().productSales}
+            angleField="value"
+            colorField="name"
+            radius={0.8}
+            label={{
+              formatter: (record: { name: any; value: any; }) =>
+                record ? `${record.name || ""}: ${record.value || 0}` : "",
+              autoRotate: true,
+              style: { fontSize: 12 },
+            }}
+          />
+        </Card>
+
+        <Card
+          title="Monthly Sales Trend"
+          className="shadow-md col-span-1 md:col-span-2"
+        >
+          <Column
+            data={ordersData?.data?.map((order: TOrder) => ({
+              month: new Date(order.createdAt).toLocaleString("default", {
+                month: "long",
+              }),
+              sales: order.totalPrice,
+            }))}
+            xField="month"
+            yField="sales"
+            label={{
+              position: "top",
+              style: {
+                fill: "#FFFFFF",
+                opacity: 0.6,
+              },
+            }}
+          />
+        </Card>
+      </div>
     </div>
   );
 }
