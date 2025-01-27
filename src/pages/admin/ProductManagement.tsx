@@ -38,7 +38,7 @@ export default function ProductManagement() {
               current={productsData?.meta?.page}
               total={productsData?.meta?.totalDocuments}
               pageSize={productsData?.meta?.limit}
-              onChange={(newPage) => setParams([{ name: "page", value: newPage.toString() }])}
+              onChange={(newPage) => setParams([{ name: "page", value: newPage }])}
               showSizeChanger={false}
             />
           </div>
