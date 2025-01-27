@@ -1,6 +1,6 @@
 import { Button, Layout } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
@@ -9,8 +9,10 @@ import CustomFooter from "./CustomFooter";
 const MainLayout = () => {
   const token = useAppSelector(useCurrentToken);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logOut());
+    navigate("/login");
   };
   return (
     <Layout style={{ minHeight: "100%" }}>

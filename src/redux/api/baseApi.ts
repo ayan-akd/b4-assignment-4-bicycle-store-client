@@ -12,8 +12,8 @@ import { logOut, setUser } from "../features/auth/authSlice";
 import NotificationToast from "@/components/ui/NotificationToast";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "http://localhost:5000/api/",
-  baseUrl: "https://pedal-paradise-server.vercel.app/api/",
+  baseUrl: "http://localhost:5000/api/",
+  // baseUrl: "https://pedal-paradise-server.vercel.app/api/",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -36,6 +36,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       toastId: "error",
       type: "error",
       message: (result?.error?.data as { message: string })?.message,
+      destroyId: "loading",
     });
   }
   if (result?.error?.status === 403) {
@@ -43,11 +44,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       toastId: "error",
       type: "error",
       message: (result?.error?.data as { message: string })?.message,
+      destroyId: "loading",
     });
   }
   if (result?.error?.status === 401) {
-    // const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
-    const res = await fetch("https://pedal-paradise-server.vercel.app/api/auth/refresh-token", {
+    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
+    // const res = await fetch("https://pedal-paradise-server.vercel.app/api/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });

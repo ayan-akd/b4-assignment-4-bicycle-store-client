@@ -1,5 +1,5 @@
 
-import OrderHistory from "@/pages/user/OrderHistory";
+import OrderHistory from "@/pages/user/MyOrders";
 import UserDashboard from "../pages/user/UserDashboard";
 import { TUserPaths } from "../types";
 

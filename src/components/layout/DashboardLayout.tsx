@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Button, Layout } from "antd";
 import Sidebar from "./Sidebar";
 import { Footer, Header } from "antd/es/layout/layout";
@@ -10,9 +10,11 @@ import CustomFooter from "./CustomFooter";
 const { Content } = Layout;
 const DashboardLayout = () => {
   const token = useAppSelector(useCurrentToken);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logOut());
+    navigate("/login");
   };
   return (
     <div>

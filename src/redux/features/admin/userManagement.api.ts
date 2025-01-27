@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/redux/api/baseApi";
-import { TQueryParams, TResponseRedux } from "@/types";
+import { TQueryParams, TResponseRedux } from "../../../types/global.type";
 
-const orderManagementApi = baseApi.injectEndpoints({
+const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllOrders: builder.query({
+    getAllUsers: builder.query({
       query: (args: TQueryParams[] | undefined) => {
         const params = new URLSearchParams();
         if (args) {
@@ -14,12 +14,12 @@ const orderManagementApi = baseApi.injectEndpoints({
           });
         }
         return {
-          url: "/orders",
+          url: "/users",
           method: "GET",
           params,
         };
       },
-      providesTags: ["orders"],
+      providesTags: ["users"],
       transformResponse: (response: TResponseRedux<any>) => {
         return {
           data: response.data,
@@ -27,26 +27,18 @@ const orderManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getMyOrders: builder.query({
-      query: (id) => ({
-        url: `/orders/my-orders/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["orders"],
-    }),
-    createOrder: builder.mutation({
-      query: (data) => ({
-        url: "/orders",
-        method: "POST",
+    updateUser: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/change-status/${id}`,
+        method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["orders", "products", "product"],
+      invalidatesTags: ["users", "user"],
     }),
   }),
 });
 
 export const {
-  useCreateOrderMutation,
-  useGetAllOrdersQuery,
-  useGetMyOrdersQuery,
-} = orderManagementApi;
+ useGetAllUsersQuery,
+ useUpdateUserMutation,
+} = userManagementApi;

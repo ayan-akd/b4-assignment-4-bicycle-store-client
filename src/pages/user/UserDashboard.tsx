@@ -2,12 +2,11 @@ import { useGetUserQuery } from "@/redux/features/auth/authApi";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { TUserData } from "@/types";
-import { Avatar, Badge, Button, Card, Spin, Statistic } from "antd";
+import { Avatar, Badge, Card, Spin, Statistic } from "antd";
 import {
   UserOutlined,
-  ShoppingOutlined,
-  StarOutlined,
 } from "@ant-design/icons";
+import ChangePassword from "./ChangePassword";
 
 export default function UserDashboard() {
   const user = useAppSelector(useCurrentUser);
@@ -80,7 +79,7 @@ export default function UserDashboard() {
 
           {/* Additional Info */}
           <div className="px-8 py-6 bg-gray-50">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card
                 title="Account Details"
                 bordered={false}
@@ -98,20 +97,7 @@ export default function UserDashboard() {
                   })}
                 </p>
               </Card>
-              <Card
-                title="Quick Actions"
-                bordered={false}
-                className="shadow-md"
-              >
-                <div className="space-y-4">
-                  <Button icon={<ShoppingOutlined />} block>
-                    Manage Products
-                  </Button>
-                  <Button icon={<StarOutlined />} block>
-                    View Reviews
-                  </Button>
-                </div>
-              </Card>
+              <ChangePassword />
             </div>
           </div>
         </div>

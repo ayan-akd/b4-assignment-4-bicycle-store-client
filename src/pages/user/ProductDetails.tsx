@@ -201,15 +201,20 @@ export default function ProductDetails() {
                 </Text>
               </div>
               <div className="flex flex-col gap-2">
-                <Button
+                {
+                  user?.role === "customer" && (
+                    <Button
                   type="primary"
                   size="large"
                   icon={<ShoppingCartOutlined />}
                   style={{ marginTop: "24px" }}
                   onClick={() => navigate(`/checkout/${_id}`)}
+                  disabled={quantity === 0}
                 >
-                  Buy Now
+                  {quantity > 0 ? "Buy Now" : "Out of Stock"}
                 </Button>
+                  )
+                }
                 {user?.role === "admin" && (
                   <EditProductModal product={product} />
                 )}

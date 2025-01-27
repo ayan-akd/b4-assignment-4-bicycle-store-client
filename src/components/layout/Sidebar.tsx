@@ -14,7 +14,7 @@ import { RiMenuFold4Fill, RiMenuFold3Fill } from "react-icons/ri";
 
 const userRole = {
   ADMIN: "admin",
-  USER: "user",
+  CUSTOMER: "customer",
 };
 
 export default function Sidebar() {
@@ -23,10 +23,6 @@ export default function Sidebar() {
   let user;
   if (token) {
     user = verifyToken(token) as TUser;
-  } else {
-    user = {
-      role: "admin",
-    };
   }
 
   let sidebarItems: ItemType<MenuItemType>[] | undefined;
@@ -37,10 +33,10 @@ export default function Sidebar() {
         userRole.ADMIN
       ) as ItemType<MenuItemType>[];
       break;
-    case userRole.USER:
+    case userRole.CUSTOMER:
       sidebarItems = sidebarItemGenerator(
         userPaths,
-        userRole.USER
+        userRole.CUSTOMER
       ) as ItemType<MenuItemType>[];
       break;
     default:

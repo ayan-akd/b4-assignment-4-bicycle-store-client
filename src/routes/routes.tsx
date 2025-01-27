@@ -20,7 +20,7 @@ import userPaths from "./userRoutes";
     children: routesGenerator(adminPaths),
   },
   {
-    path: "/user",
+    path: "/customer",
     element: <DashboardLayout />,
     children: routesGenerator(userPaths)
   },

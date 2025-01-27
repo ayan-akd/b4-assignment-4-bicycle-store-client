@@ -48,6 +48,9 @@ export default function AllProducts() {
           allowClear
           size="large"
           loading={isFetching}
+          onSearch={(value) => {
+            setParams([{ name: "searchTerm", value }]);
+          }}
           onChange={(e) => {
             setParams([{ name: "searchTerm", value: e.target.value }]);
           }}
