@@ -2,7 +2,7 @@ import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement
 import { TProduct, TQueryParams } from "@/types";
 import { useState } from "react";
 import ProductCard from "../admin/ProductCard";
-import { Pagination, Select, Spin } from "antd";
+import { Empty, Pagination, Select, Spin, Typography } from "antd";
 import Search from "antd/es/input/Search";
 import { categoryOptions } from "@/constants/productConstants";
 
@@ -15,10 +15,8 @@ const sortOptions = [
 ];
 export default function AllProducts() {
   const [params, setParams] = useState<TQueryParams[]>([]);
-  const [page, setPage] = useState<number>(1);
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
-    { name: "page", value: page },
     { name: "limit", value: "8" },
   ]);
 
@@ -52,7 +50,6 @@ export default function AllProducts() {
           loading={isFetching}
           onChange={(e) => {
             setParams([{ name: "searchTerm", value: e.target.value }]);
-            setPage(1);
           }}
         />
         <Select
@@ -64,8 +61,7 @@ export default function AllProducts() {
           loading={isFetching}
           onChange={(value) => {
             if (value) {
-              setParams([{ name: "sort", value }]);
-              setPage(1);
+              setParams([{ name: "sort", value }, { name: "page", value: "1" }]);
             } else {
               setParams([]);
             }
@@ -76,19 +72,33 @@ export default function AllProducts() {
         <div className="flex justify-center items-center h-screen">
           <Spin size="large" />
         </div>
+      ) : productsData?.data.length === 0 ? (
+        <div className="flex justify-center items-center h-screen">
+          <Empty
+            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            styles={{ image: { height: 200 } }}
+            description={
+              <Typography.Text type="secondary">
+                No Products found.
+              </Typography.Text>
+            }
+          ></Empty>
+        </div>
       ) : (
         <>
-        <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0 p-4 items-center">
-          {productsData?.data?.map((product: TProduct) => (
-            <ProductCard key={product?._id} product={product} />
-          ))}
-        </div>
-        <div className="flex justify-center my-8">
+          <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0 p-4 items-center">
+            {productsData?.data?.map((product: TProduct) => (
+              <ProductCard key={product?._id} product={product} />
+            ))}
+          </div>
+          <div className="flex justify-center my-8">
             <Pagination
               current={productsData?.meta?.page}
               total={productsData?.meta?.totalDocuments}
               pageSize={productsData?.meta?.limit}
-              onChange={(newPage) => setParams([{ name: "page", value: newPage.toString() }])}
+              onChange={(newPage) =>
+                setParams([{ name: "page", value: newPage }])
+              }
               showSizeChanger={false}
             />
           </div>

@@ -72,7 +72,7 @@ export default function Events() {
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                                     {event.title}
                                 </h3>
-                                <p className="text-gray-600 mb-4">
+                                <p title={event.description} className="text-gray-600 mb-4 line-clamp-1">
                                     {event.description}
                                 </p>
                                 <div className="flex flex-wrap gap-4 text-sm text-gray-500">

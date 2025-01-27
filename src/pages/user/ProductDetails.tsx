@@ -18,6 +18,7 @@ import {
   SafetyCertificateOutlined,
   RocketOutlined,
   ToolOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
@@ -40,7 +41,7 @@ export default function ProductDetails() {
   }
 
   const product = data?.data;
-  const { name, price, image, description, category, _id } = product;
+  const { name, price, image, description, category, _id, quantity } = product;
 
   return (
     <div
@@ -96,15 +97,21 @@ export default function ProductDetails() {
               }}
             >
               <Tag
-                color="blue"
-                icon={<CheckCircleOutlined />}
+                color={quantity > 0 ? "blue" : "red"}
+                icon={
+                  quantity > 0 ? (
+                    <CheckCircleOutlined />
+                  ) : (
+                    <CloseCircleOutlined />
+                  )
+                }
                 style={{
                   padding: "4px 12px",
                   borderRadius: "99px",
                   marginBottom: "16px",
                 }}
               >
-                In Stock
+                {quantity > 0 ? "In Stock" : "Out of Stock"}
               </Tag>
 
               <Title level={1} style={{ marginBottom: "16px" }}>

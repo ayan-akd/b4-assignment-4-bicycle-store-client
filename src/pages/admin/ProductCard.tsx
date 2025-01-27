@@ -7,6 +7,7 @@ import { useDeleteProductMutation } from "@/redux/features/admin/productManageme
 import NotificationToast from "@/components/ui/NotificationToast";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { motion } from 'framer-motion';
 
 const { Title } = Typography;
 
@@ -43,7 +44,11 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
   };
 
   return (
-    <div>
+    <motion.div
+    whileHover={{ y: -10 }}
+    transition={{ duration: 0.3 }}
+    className=" rounded-2xl shadow-xl"
+    >
       <Badge.Ribbon text={`$${price}`} color="blue">
         <Card
           hoverable
@@ -85,7 +90,7 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
           </div>
         </Card>
       </Badge.Ribbon>
-    </div>
+    </motion.div>
   );
 };
 
