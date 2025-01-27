@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
 import CustomNumberInput from "@/components/form/CustomNumberInput";
@@ -6,7 +7,7 @@ import { useGetSingleProductQuery } from "@/redux/features/admin/productManageme
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { orderSchema } from "@/schemas/orderSchema";
-import { TProduct } from "@/types";
+import { TProduct, TResponse } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Col, Row, Spin, Tag, Card, Typography } from "antd";
 import { useState } from "react";
@@ -14,12 +15,15 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useGetUserQuery } from "@/redux/features/auth/authApi";
+import NotificationToast from "@/components/ui/NotificationToast";
+import { useCreateOrderMutation } from "@/redux/features/order/orderManagement.api";
 
 const { Title } = Typography;
 
 export default function Checkout() {
   const { productId } = useParams();
   const [quantity, setQuantity] = useState(1);
+  const [createOrder] = useCreateOrderMutation();
   const navigate = useNavigate();
   const user = useAppSelector(useCurrentUser);
   const { data: getUserData } = useGetUserQuery(user?.email, {
@@ -39,17 +43,42 @@ export default function Checkout() {
   const product = data?.data as TProduct;
   const totalPrice = product?.price * quantity;
 
-  const handleOrder: SubmitHandler<FieldValues> = (data) => {
+  const handleOrder: SubmitHandler<FieldValues> =async (data) => {
+    NotificationToast({
+      message: "Ordering product...",
+      type: "loading",
+      toastId: "1",
+    });
+
     const orderData = {
-      productId: product?._id,
-      id: getUserData?.data?._id,
+      product: product?._id,
+      user: getUserData?.data?._id,
       quantity: data?.quantity,
       address: data?.address,
       email: user?.email,
       totalPrice: totalPrice,
     };
-
-    console.log(orderData);
+    try {
+      const res = (await createOrder(orderData)) as TResponse<any>;
+      if (res.data) {
+        NotificationToast({
+          message: "Order Created successfully",
+          type: "success",
+          toastId: "2",
+          destroyId: "1",
+        });
+      } else if (res.error) {
+        NotificationToast({
+          message: res.error.data.message,
+          type: "error",
+          toastId: "2",
+          destroyId: "1",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    
   };
 
   return (
@@ -77,6 +106,7 @@ export default function Checkout() {
             name: product?.name,
             price: product?.price,
             email: user?.email,
+            quantity: 1,
           }}
         >
           <Row gutter={16}>
@@ -101,7 +131,6 @@ export default function Checkout() {
                 onChange={(value) => {
                   setQuantity(value || 1);
                 }}
-                defaultValue={1}
                 max={product?.quantity}
                 min={1}
               />

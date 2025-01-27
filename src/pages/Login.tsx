@@ -73,7 +73,7 @@ export default function Login() {
       const res = (await register(userInfo)) as TResponse<any>;
       if (res.data) {
         NotificationToast({
-          message: "Registration successful",
+          message: "Registration successful. Please login.",
           type: "success",
           toastId: "2",
           destroyId: "1",
