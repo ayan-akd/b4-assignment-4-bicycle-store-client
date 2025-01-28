@@ -11,7 +11,10 @@ import {
 } from "@/components/ui/card";
 import NotificationToast from "@/components/ui/NotificationToast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLoginMutation, useRegisterMutation } from "@/redux/features/auth/authApi";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginSchema, registerSchema } from "@/schemas/authSchemas";
@@ -21,11 +24,12 @@ import { Button } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export default function Login() {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const onLoginSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -35,7 +39,7 @@ export default function Login() {
       toastId: "1",
     });
     try {
-      const res = await login(data).unwrap() as TResponse<any>;
+      const res = (await login(data).unwrap()) as TResponse<any>;
       const user = verifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       if (res.data) {
@@ -97,84 +101,100 @@ export default function Login() {
     }
   };
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Tabs defaultValue="login" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Login</TabsTrigger>
-          <TabsTrigger value="register">Register</TabsTrigger>
-        </TabsList>
-        <TabsContent value="login">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center">Login</CardTitle>
-            </CardHeader>
-            <CustomForm 
-            onSubmit={onLoginSubmit}
-            resolver={zodResolver(loginSchema)}
-            >
-              <CardContent className="space-y-1">
-                <div className="space-y-1">
-                  <CustomInput
-                    name="email"
-                    type="email"
-                    label="Email"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <CustomPassword
-                    name="password"
-                    label="Password"
-                    placeholder="Enter your password"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-center">
-                <Button htmlType="submit">Login</Button>
-              </CardFooter>
-            </CustomForm>
-          </Card>
-        </TabsContent>
-        {/*  Register */}
-        <TabsContent value="register">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center">Register</CardTitle>
-            </CardHeader>
-            <CustomForm 
-            onSubmit={onRegisterSubmit}
-            resolver={zodResolver(registerSchema)}
-            >
-              <CardContent className="space-y-1">
-                <div className="space-y-1">
-                  <CustomInput
-                    name="name"
-                    type="text"
-                    label="Name"
-                    placeholder="Enter your name"
-                  />
-                  <CustomInput
-                    name="email"
-                    type="email"
-                    label="Email"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <CustomPassword
-                    name="password"
-                    label="Password"
-                    placeholder="Enter your password"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-center">
-                <Button htmlType="submit">Register</Button>
-              </CardFooter>
-            </CustomForm>
-          </Card>
-        </TabsContent>
-      </Tabs>
+    <div className="h-screen">
+      <div className="px-20 py-10">
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={() => navigate(-1)}
+        size="large"
+        style={{
+          marginBottom: "24px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+        }}
+      >
+        Go Back
+      </Button>
+      </div>
+      <div className="flex items-center justify-center h-2/4">
+        <Tabs defaultValue="login" className="w-[400px]">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="register">Register</TabsTrigger>
+          </TabsList>
+          <TabsContent value="login">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Login</CardTitle>
+              </CardHeader>
+              <CustomForm
+                onSubmit={onLoginSubmit}
+                resolver={zodResolver(loginSchema)}
+              >
+                <CardContent className="space-y-1">
+                  <div className="space-y-1">
+                    <CustomInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <CustomPassword
+                      name="password"
+                      label="Password"
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button htmlType="submit">Login</Button>
+                </CardFooter>
+              </CustomForm>
+            </Card>
+          </TabsContent>
+          {/*  Register */}
+          <TabsContent value="register">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Register</CardTitle>
+              </CardHeader>
+              <CustomForm
+                onSubmit={onRegisterSubmit}
+                resolver={zodResolver(registerSchema)}
+              >
+                <CardContent className="space-y-1">
+                  <div className="space-y-1">
+                    <CustomInput
+                      name="name"
+                      type="text"
+                      label="Name"
+                      placeholder="Enter your name"
+                    />
+                    <CustomInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <CustomPassword
+                      name="password"
+                      label="Password"
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button htmlType="submit">Register</Button>
+                </CardFooter>
+              </CustomForm>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

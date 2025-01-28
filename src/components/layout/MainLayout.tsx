@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
 import CustomFooter from "./CustomFooter";
+import logo from "../../assets/icons/icon.png";
 
 const MainLayout = () => {
   const token = useAppSelector(useCurrentToken);
@@ -18,7 +19,8 @@ const MainLayout = () => {
     <Layout style={{ minHeight: "100%" }}>
       <Header className="px-5 md:px-10">
         <div className="flex justify-around items-center gap-2">
-          <NavLink to="/">
+          <NavLink className="flex items-center gap-1" to="/">
+          <img src={logo} alt="logo" className="w-10 h-10 bg-white rounded-full" />
             <div className="text-xl font-bold text-white">Pedal Paradise</div>
           </NavLink>
           <Navbar />

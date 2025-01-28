@@ -7,6 +7,7 @@ import { TUserPaths } from "../types";
 import About from "../pages/About";
 import Checkout from "@/pages/user/Checkout";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import VerifyOrder from "@/pages/user/VerifyOrder";
 
 const mainRoutes: TUserPaths[] = [
   {
@@ -47,6 +48,15 @@ const mainRoutes: TUserPaths[] = [
     name: "About",
     path: "about",
     element: <About />,
+  },
+  {
+    name: "Verify Order",
+    path: "verify-order",
+    element: (
+      <ProtectedRoute role="customer">
+        <VerifyOrder />,
+      </ProtectedRoute>
+    ),
   },
 ];
 

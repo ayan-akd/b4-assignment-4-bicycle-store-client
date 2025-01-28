@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logOut, useCurrentToken } from "../../redux/features/auth/authSlice";
 import CustomFooter from "./CustomFooter";
 
+
 const { Content } = Layout;
 const DashboardLayout = () => {
   const token = useAppSelector(useCurrentToken);

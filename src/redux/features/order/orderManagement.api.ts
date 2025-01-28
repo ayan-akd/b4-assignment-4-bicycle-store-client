@@ -48,7 +48,13 @@ const orderManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["orders"],
-    })
+    }),
+    verifyOrder: builder.query({
+      query: (id) => ({
+        url: `/verify/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -57,4 +63,5 @@ export const {
   useGetAllOrdersQuery,
   useGetMyOrdersQuery,
   useUpdateOrderStatusMutation,
+  useVerifyOrderQuery,
 } = orderManagementApi;

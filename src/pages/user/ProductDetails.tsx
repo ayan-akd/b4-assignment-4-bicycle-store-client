@@ -200,21 +200,38 @@ export default function ProductDetails() {
                   Free Premium Shipping & Assembly Available
                 </Text>
               </div>
-              <div className="flex flex-col gap-2">
-                {
-                  user?.role === "customer" && (
-                    <Button
-                  type="primary"
-                  size="large"
-                  icon={<ShoppingCartOutlined />}
-                  style={{ marginTop: "24px" }}
-                  onClick={() => navigate(`/checkout/${_id}`)}
-                  disabled={quantity === 0}
+              {!user && (
+                <div
+                  style={{
+                    background: "#f6ffed",
+                    padding: "16px",
+                    borderRadius: "12px",
+                    marginTop: "24px",
+                  }}
                 >
-                  {quantity > 0 ? "Buy Now" : "Out of Stock"}
-                </Button>
-                  )
-                }
+                  <Title level={5}>Want to purchase this product?</Title>
+                  <Text>
+                    Please{" "}
+                    <a href="/login" className="text-blue-500 font-semibold">
+                      Login
+                    </a>{" "}
+                    to your account to start shopping!
+                  </Text>
+                </div>
+              )}
+              <div className="flex flex-col gap-2">
+                {user?.role === "customer" && (
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<ShoppingCartOutlined />}
+                    style={{ marginTop: "24px" }}
+                    onClick={() => navigate(`/checkout/${_id}`)}
+                    disabled={quantity === 0}
+                  >
+                    {quantity > 0 ? "Buy Now" : "Out of Stock"}
+                  </Button>
+                )}
                 {user?.role === "admin" && (
                   <EditProductModal product={product} />
                 )}

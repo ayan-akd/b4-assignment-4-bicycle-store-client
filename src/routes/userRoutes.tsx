@@ -13,7 +13,7 @@ const userPaths: TUserPaths[] = [
     name: "My Orders",
     path: "order-history",
     element: <OrderHistory />,
-  },
+  }
 ];
 
 export default userPaths;

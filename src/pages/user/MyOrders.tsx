@@ -72,7 +72,7 @@ export default function MyOrders() {
         render: (status) => {
           const statusColors = {
             pending: "orange",
-            processing: "blue",
+            paid: "blue",
             shipped: "cyan",
             delivered: "green",
             cancelled: "red",

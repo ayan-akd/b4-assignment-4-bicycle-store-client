@@ -6,8 +6,9 @@ import mainRoutes from "./mainRoutes";
 import adminPaths from "./adminRoutes";
 import ErrorPage from "@/pages/ErrorPage";
 import userPaths from "./userRoutes";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
- const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
@@ -16,13 +17,21 @@ import userPaths from "./userRoutes";
   },
   {
     path: "/admin",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute role="admin">
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: routesGenerator(adminPaths),
   },
   {
     path: "/customer",
-    element: <DashboardLayout />,
-    children: routesGenerator(userPaths)
+    element: (
+      <ProtectedRoute role="customer">
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: routesGenerator(userPaths),
   },
 ]);
 

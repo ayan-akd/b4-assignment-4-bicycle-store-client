@@ -9,7 +9,7 @@ const navRouteGenerator = (
   const navItems: TSidebarRoute[] = routes
     .filter((route) => {
       if (
-        ["Orders", "Product Details", "Login", "Signup", "Checkout"].includes(route.name)
+        ["Orders", "Product Details", "Login", "Signup", "Checkout", "Verify Order"].includes(route.name)
       ) {
         return false;
       }

@@ -11,7 +11,7 @@ import userPaths from "../../routes/userRoutes";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { RiMenuFold4Fill, RiMenuFold3Fill } from "react-icons/ri";
-
+import logo from "../../assets/icons/icon.png";
 const userRole = {
   ADMIN: "admin",
   CUSTOMER: "customer",
@@ -60,8 +60,9 @@ export default function Sidebar() {
         zIndex: 100,
       }}
     >
-      <Link to="/">
-        <div className="text-xl font-bold m-5 text-white">Pedal Paradise</div>
+      <Link to="/" className="flex items-center gap-1">
+      <img src={logo} alt="logo" className="w-10 h-10 bg-white rounded-full" />
+        <div className="text-xl font-bold my-5 text-white">Pedal Paradise</div>
       </Link>
       <div
         className="block md:hidden z-50"

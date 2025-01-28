@@ -28,8 +28,8 @@ const statusItems = [
     key: "pending",
   },
   {
-    label: "Processing",
-    key: "processing",
+    label: "Paid",
+    key: "paid",
   },
   {
     label: "Shipped",
@@ -190,7 +190,7 @@ export default function OrderManagement() {
       render: (status) => {
         const statusColors = {
           pending: "orange",
-          processing: "blue",
+          paid: "blue",
           shipped: "cyan",
           delivered: "green",
           cancelled: "red",

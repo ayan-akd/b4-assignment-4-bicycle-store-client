@@ -67,6 +67,9 @@ export default function Checkout() {
           toastId: "2",
           destroyId: "1",
         });
+        setTimeout(() => {
+          window.open(res.data.data.payment.checkout_url, "_blank");
+        }, 1000);
       } else if (res.error) {
         NotificationToast({
           message: res.error.data.message,
