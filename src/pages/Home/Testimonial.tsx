@@ -8,7 +8,7 @@ const testimonials = [
     role: "Mountain Bicycle Enthusiast",
     image: "https://i.pravatar.cc/150?img=1",
     rating: 5,
-    text: "Pedal Paradise transformed my cycling experience! Their expert guidance helped me find the perfect mountain bike. The service is exceptional!",
+    text: "Pedal Paradise transformed my cycling experience! Their expert guidance helped me find the perfect mountain bicycle. The service is exceptional!",
   },
   {
     id: 2,
