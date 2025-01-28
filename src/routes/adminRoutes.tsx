@@ -6,7 +6,7 @@ import ProductManagement from "@/pages/admin/ProductManagement";
 
 const adminPaths: TUserPaths[] = [
   {
-    name: "Dashboard",
+    name: "My Profile",
     path: "dashboard",
     element: <UserDashboard />,
   },

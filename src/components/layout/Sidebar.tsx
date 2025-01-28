@@ -85,7 +85,7 @@ export default function Sidebar() {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={[`Dashboard`]}
+        defaultSelectedKeys={[`My Profile`]}
         items={sidebarItems}
       />
     </Sider>

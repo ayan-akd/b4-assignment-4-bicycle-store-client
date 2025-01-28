@@ -5,7 +5,7 @@ import { TUserPaths } from "../types";
 
 const userPaths: TUserPaths[] = [
   {
-    name: "Dashboard",
+    name: "My Profile",
     path: "dashboard",
     element: <UserDashboard />,
   },
