@@ -2,15 +2,20 @@ import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement
 import { TProduct, TQueryParams } from "@/types";
 import { useState } from "react";
 import ProductCard from "../admin/ProductCard";
+import { MdCompareArrows } from "react-icons/md";
 import {
+  Badge,
   Button,
   Drawer,
   Empty,
+  Image,
   Input,
   Pagination,
   Select,
   Slider,
   Spin,
+  Table,
+  Tag,
   Typography,
 } from "antd";
 import Search from "antd/es/input/Search";
@@ -30,6 +35,9 @@ export default function AllProducts() {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [compareItems, setCompareItems] = useState<TProduct[]>([]);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
     { name: "limit", value: "8" },
@@ -44,13 +52,13 @@ export default function AllProducts() {
   return (
     <div>
       <h1 className="text-center text-4xl mt-20 mb-10 font-bold">
-        All Products
+        All Bicycles
       </h1>
       <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-10 px-10">
         <div />
         <Search
           className="w-full md:w-[450px]"
-          placeholder="Search products..."
+          placeholder="Search bicycles..."
           enterButton="Search"
           allowClear
           size="large"
@@ -264,7 +272,12 @@ export default function AllProducts() {
         <>
           <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0 p-4 items-center">
             {productsData?.data?.map((product: TProduct) => (
-              <ProductCard key={product?._id} product={product} />
+              <ProductCard
+                key={product?._id}
+                product={product}
+                compareItems={compareItems}
+                setCompareItems={setCompareItems}
+              />
             ))}
           </div>
           <div className="flex justify-center my-8">
@@ -286,6 +299,79 @@ export default function AllProducts() {
           </div>
         </>
       )}
+      {compareItems.length > 0 && (
+          <Badge count={compareItems.length} className="fixed bottom-8 right-8">
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<MdCompareArrows />}
+              onClick={() => setDrawerVisible(true)}
+              size="large"
+            />
+          </Badge>
+        )}
+      <Drawer
+          title={
+            <div className="flex justify-between items-center">
+              <span>Compare Bicycles</span>
+              <Button danger onClick={() => setCompareItems([])}>
+                Clear All
+              </Button>
+            </div>
+          }
+        placement="right"
+        width={720}
+        open={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+      >
+        <Table
+          dataSource={compareItems.map(item => ({...item, key: item._id}))}
+          style={{ overflow: "auto" }}
+          columns={[
+            {
+              title: "Image",
+              dataIndex: "image",
+              render: (image) => <Image src={image} width={100} />,
+            },
+            {
+              title: "Name",
+              dataIndex: "name",
+              render: (text) => (
+                <Typography.Text 
+                 strong>{text}</Typography.Text>
+              ),
+            },
+            {
+              title: "Price",
+              dataIndex: "price",
+              render: (price) => <Tag color="green">${price}</Tag>,
+            },
+            {
+              title: "Brand",
+              dataIndex: "brand",
+            },
+            {
+              title: "Category",
+              dataIndex: "category",
+            },
+            {
+              title: "Actions",
+              render: (_, record) => (
+                <Button
+                  danger
+                  onClick={() =>
+                    setCompareItems((items) =>
+                      items.filter((item) => item._id !== record._id)
+                    )
+                  }
+                >
+                  Remove
+                </Button>
+              ),
+            },
+          ]}
+        />
+      </Drawer>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function Featured() {
   return (
     <div>
       <h1 className="text-center text-4xl mt-10 mb-10 font-bold">
-        Featured Products
+        Featured Bicycles
       </h1>
       {isFetching ? (
         <div className="flex justify-center items-center h-screen">

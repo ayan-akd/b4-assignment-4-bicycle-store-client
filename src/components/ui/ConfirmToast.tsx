@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import { Button, Popconfirm } from "antd";
 import { FaExclamationCircle } from "react-icons/fa";
-
+import { DeleteOutlined } from "@ant-design/icons";
 interface ConfirmToastProps {
   title: string;
   description?: string;
@@ -64,6 +64,7 @@ const ConfirmToast: React.FC<ConfirmToastProps> = ({
       onCancel={handleCancel}
     >
       <Button type={buttonType} onClick={showPopconfirm} danger={danger}>
+      {<DeleteOutlined />}
         {buttonText}
       </Button>
     </Popconfirm>

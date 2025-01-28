@@ -8,26 +8,35 @@ import NotificationToast from "@/components/ui/NotificationToast";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { motion } from "framer-motion";
+import { MdCompareArrows } from "react-icons/md";
 
 const { Title } = Typography;
 
 type ProductCardProps = {
   product: TProduct;
   management?: boolean;
+  compareItems?: TProduct[];
+  setCompareItems?: React.Dispatch<React.SetStateAction<TProduct[]>>;
 };
 
-const ProductCard = ({ product, management }: ProductCardProps) => {
+const ProductCard = ({
+  product,
+  management,
+  compareItems,
+  setCompareItems,
+}: ProductCardProps) => {
   const navigate = useNavigate();
   const [deleteProduct] = useDeleteProductMutation();
   const user = useAppSelector(useCurrentUser);
-  const { name, price, image, description, _id, category, brand } = product;
+  const { name, price, image, description, _id, category, brand, quantity } =
+    product;
 
   const handleDelete = async (id: string) => {
     try {
       const res = (await deleteProduct(id)) as TResponse<any>;
       if (res.data) {
         NotificationToast({
-          message: "Product added successfully",
+          message: "Product deleted successfully",
           type: "success",
           toastId: "2",
         });
@@ -40,6 +49,12 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handleAddToCompare = (product: TProduct) => {
+    if (compareItems && compareItems.length < 3) {
+      setCompareItems?.([...compareItems, product]);
     }
   };
 
@@ -64,12 +79,17 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
           <Title title={name} className="line-clamp-1" level={4}>
             {name}
           </Title>
-          <Tag color="green" className="mb-2">
+          <div className="flex justify-around items-center mb-2">
+          <Tag color="green" className="">
             {category}
           </Tag>
-          <Tag color="blue" className="mb-2 ml-2">
-            {brand}
+          <Tag color="blue" className="">
+            {brand.toLocaleUpperCase()}
           </Tag>
+          <Tag color={quantity > 0 ? "success" : "error"}>
+            {quantity > 0 ? "In Stock" : "Out of Stock"}
+          </Tag>
+          </div>
           <p
             title={description}
             className="text-gray-600 text-sm line-clamp-2 mb-4"
@@ -80,6 +100,15 @@ const ProductCard = ({ product, management }: ProductCardProps) => {
             <Button type="primary" onClick={() => navigate(`/product/${_id}`)}>
               View Details
             </Button>
+
+            {!management && (
+              <Button
+                icon={<MdCompareArrows />}
+                onClick={() => handleAddToCompare(product)}
+              >
+                Compare
+              </Button>
+            )}
 
             {user?.role === "admin" && management && (
               <ConfirmToast

@@ -68,7 +68,8 @@ export default function Checkout() {
           destroyId: "1",
         });
         setTimeout(() => {
-          window.open(res.data.data.payment.checkout_url, "_blank");
+          // window.open(res.data.data.payment.checkout_url, "_blank");
+          window.location.href = res.data.data.payment.checkout_url;
         }, 1000);
       } else if (res.error) {
         NotificationToast({

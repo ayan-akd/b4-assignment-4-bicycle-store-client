@@ -10,12 +10,18 @@ import { categoryOptions } from "@/constants/productConstants";
 import CustomTextArea from "../form/CustomTextArea";
 import CustomNumberInput from "../form/CustomNumberInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addProductSchema } from "@/schemas/productSchema";
+import { editProductSchema } from "@/schemas/productSchema";
 import { useUpdateProductMutation } from "@/redux/features/admin/productManagement.api";
 import NotificationToast from "../ui/NotificationToast";
 import { TProduct, TResponse } from "@/types";
 
-export default function EditProductModal({ product }: { product: TProduct }) {
+export default function EditProductModal({
+  product,
+  management,
+}: {
+  product: TProduct;
+  management?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [updateProduct] = useUpdateProductMutation();
 
@@ -30,7 +36,7 @@ export default function EditProductModal({ product }: { product: TProduct }) {
     NotificationToast({
       message: "Updating  product...",
       type: "loading",
-      toastId: "1",
+      toastId: "loading",
     });
 
     const productData = {
@@ -48,7 +54,7 @@ export default function EditProductModal({ product }: { product: TProduct }) {
           message: "Product updated successfully",
           type: "success",
           toastId: "2",
-          destroyId: "1",
+          destroyId: "loading",
         });
         onClose();
       } else if (res.error) {
@@ -56,7 +62,7 @@ export default function EditProductModal({ product }: { product: TProduct }) {
           message: res.error.data.message,
           type: "error",
           toastId: "2",
-          destroyId: "1",
+          destroyId: "loading",
         });
       }
     } catch (err) {
@@ -66,14 +72,20 @@ export default function EditProductModal({ product }: { product: TProduct }) {
 
   return (
     <>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showDrawer}
-        icon={<EditOutlined />}
-      >
-        Update Product
-      </Button>
+      {management ? (
+        <Button type="primary" onClick={showDrawer} icon={<EditOutlined />}>
+          Edit
+        </Button>
+      ) : (
+        <Button
+          type="primary"
+          size="large"
+          onClick={showDrawer}
+          icon={<EditOutlined />}
+        >
+          Update Product
+        </Button>
+      )}
       <Drawer
         title="Update Product"
         width={720}
@@ -87,7 +99,7 @@ export default function EditProductModal({ product }: { product: TProduct }) {
       >
         <CustomForm
           onSubmit={onSubmit}
-          resolver={zodResolver(addProductSchema)}
+          resolver={zodResolver(editProductSchema)}
           defaultValues={product}
         >
           <Row gutter={16}>

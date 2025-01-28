@@ -63,6 +63,7 @@ export default function OrderManagement() {
     quantity: order.quantity,
     product: order.product.name,
     status: order.status,
+    transaction_id: order?.transaction?.paymentId,
   }));
 
   const handleStatusChange = async (value: any) => {
@@ -180,6 +181,16 @@ export default function OrderManagement() {
       render: (price) => (
         <Tag color="gold">
           <DollarCircleOutlined /> ${price}
+        </Tag>
+      ),
+    },
+    {
+      title: "Transaction ID",
+      dataIndex: "transaction_id",
+      key: "transaction_id",
+      render: (text) => (
+        <Tag color="purple">
+          <code>{text}</code>
         </Tag>
       ),
     },

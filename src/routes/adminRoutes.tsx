@@ -1,8 +1,8 @@
 import OrderManagement from "@/pages/admin/OrderManagement";
-import ProductManagement from "../pages/admin/ProductManagement";
 import UserManagement from "../pages/admin/UserManagement";
 import { TUserPaths } from "../types";
 import UserDashboard from "@/pages/user/UserDashboard";
+import ProductManagement from "@/pages/admin/ProductManagement";
 
 const adminPaths: TUserPaths[] = [
   {

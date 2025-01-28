@@ -53,6 +53,14 @@ export default function CustomFooter() {
               </a>
             </div>
           </nav>
+          <div className="flex justify-center mt-8">
+            <div className="text-gray-500 text-center">
+              <p>Email: info@bicyclestore.com</p>
+              <p>Phone: +1 (555) 123-4567</p>
+              <p>Address: 123 Bike Street, Cycling City, CC 12345</p>
+              <p>Business Hours: Mon-Sat 9AM-6PM</p>
+            </div>
+          </div>
           <div className="flex justify-center mt-8 space-x-6">
             <a href="#" className="text-gray-400 hover:text-gray-500">
               <span className="sr-only">Facebook</span>
@@ -127,7 +135,7 @@ export default function CustomFooter() {
             </a>
           </div>
           <p className="mt-8 text-base leading-6 text-center text-gray-400">
-          ©{new Date().getFullYear()} BicycleStore, Inc. All rights reserved.
+            ©{new Date().getFullYear()} BicycleStore, Inc. All rights reserved.
           </p>
         </div>
       </section>
