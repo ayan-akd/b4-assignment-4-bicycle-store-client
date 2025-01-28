@@ -1,11 +1,9 @@
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CheckCircle, AlertCircle } from "lucide-react";
 import { Button, Empty, QRCode, Spin, Tag, Typography } from "antd";
 import { useVerifyOrderQuery } from "@/redux/features/order/orderManagement.api";
 import { Link, useSearchParams } from "react-router-dom";
