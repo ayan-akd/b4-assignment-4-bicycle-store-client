@@ -43,7 +43,7 @@ export default function Checkout() {
   const product = data?.data as TProduct;
   const totalPrice = product?.price * quantity;
 
-  const handleOrder: SubmitHandler<FieldValues> =async (data) => {
+  const handleOrder: SubmitHandler<FieldValues> = async (data) => {
     NotificationToast({
       message: "Ordering product...",
       type: "loading",
@@ -78,7 +78,6 @@ export default function Checkout() {
     } catch (err) {
       console.log(err);
     }
-    
   };
 
   return (
@@ -115,7 +114,7 @@ export default function Checkout() {
                 type="text"
                 readonly
                 name="name"
-                label="Name of Bike"
+                label="Name of Bicycle"
               />
             </Col>
             <Col span={12}>

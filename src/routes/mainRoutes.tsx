@@ -6,6 +6,7 @@ import ProductDetails from "../pages/user/ProductDetails";
 import { TUserPaths } from "../types";
 import About from "../pages/About";
 import Checkout from "@/pages/user/Checkout";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 const mainRoutes: TUserPaths[] = [
   {
@@ -26,7 +27,11 @@ const mainRoutes: TUserPaths[] = [
   {
     name: "Checkout",
     path: "checkout/:productId",
-    element: <Checkout />,
+    element: (
+      <ProtectedRoute role="customer">
+        <Checkout />
+      </ProtectedRoute>
+    ),
   },
   {
     name: "Login",
@@ -43,7 +48,6 @@ const mainRoutes: TUserPaths[] = [
     path: "about",
     element: <About />,
   },
-
 ];
 
 export default mainRoutes;

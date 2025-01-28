@@ -9,7 +9,7 @@ export default function Featured() {
   const featuredProducts = productsData?.data?.slice(0, 4);
   return (
     <div>
-      <h1 className="text-center text-4xl mt-20 mb-10 font-bold">
+      <h1 className="text-center text-4xl mt-10 mb-10 font-bold">
         Featured Products
       </h1>
       {isFetching ? (

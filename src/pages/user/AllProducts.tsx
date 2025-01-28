@@ -2,9 +2,20 @@ import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement
 import { TProduct, TQueryParams } from "@/types";
 import { useState } from "react";
 import ProductCard from "../admin/ProductCard";
-import { Empty, Pagination, Select, Spin, Typography } from "antd";
+import {
+  Button,
+  Drawer,
+  Empty,
+  Input,
+  Pagination,
+  Select,
+  Slider,
+  Spin,
+  Typography,
+} from "antd";
 import Search from "antd/es/input/Search";
 import { categoryOptions } from "@/constants/productConstants";
+import { FilterOutlined } from "@ant-design/icons";
 
 const sortOptions = [
   { value: "name", label: "Name (A-Z)" },
@@ -12,37 +23,33 @@ const sortOptions = [
   { value: "-price", label: "Price (High-Low)" },
   { value: "price", label: "Price (Low-High)" },
   { value: "-createdAt", label: "Latest" },
+  { value: "-quantity", label: "Availability (High-Low)" },
+  { value: "quantity", label: "Availability (Low-High)" },
 ];
 export default function AllProducts() {
   const [params, setParams] = useState<TQueryParams[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
     { name: "limit", value: "8" },
   ]);
+  const brands = [
+    ...new Set(productsData?.data?.map((product: TProduct) => product.brand)),
+  ].map((brand) => ({
+    value: brand,
+    label: brand,
+  }));
 
   return (
     <div>
       <h1 className="text-center text-4xl mt-20 mb-10 font-bold">
         All Products
       </h1>
-      <div className="flex flex-col md:flex-row  justify-around items-center gap-5 mb-10 px-10 ">
-        <Select
-          size="large"
-          placeholder="Select Category..."
-          className="w-full md:w-[200px]"
-          options={categoryOptions}
-          allowClear
-          loading={isFetching}
-          onChange={(value) => {
-            if (value) {
-              setParams([{ name: "category", value }]);
-            } else {
-              setParams([]);
-            }
-          }}
-        />
+      <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-10 px-10">
+        <div />
         <Search
-          className="w-full md:w-[450px] order-first md:order-none"
+          className="w-full md:w-[450px]"
           placeholder="Search products..."
           enterButton="Search"
           allowClear
@@ -55,22 +62,188 @@ export default function AllProducts() {
             setParams([{ name: "searchTerm", value: e.target.value }]);
           }}
         />
-        <Select
+        <Button
           size="large"
-          placeholder="Sort By..."
-          className="w-full md:w-[200px]"
-          options={sortOptions}
-          allowClear
-          loading={isFetching}
-          onChange={(value) => {
-            if (value) {
-              setParams([{ name: "sort", value }, { name: "page", value: "1" }]);
-            } else {
-              setParams([]);
-            }
-          }}
-        />
+          icon={<FilterOutlined />}
+          onClick={() => setOpenDrawer(true)}
+        >
+          Filters
+        </Button>
       </div>
+
+      <Drawer
+        title="Filter Products"
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        width={320}
+      >
+        <div className="flex flex-col gap-5">
+          {/* catergory  */}
+          <div>
+            <Typography.Text strong>Category</Typography.Text>
+            <Select
+              size="large"
+              placeholder="Select Category..."
+              className="w-full mt-2"
+              options={categoryOptions}
+              allowClear
+              loading={isFetching}
+              onChange={(value) => {
+                if (value) {
+                  const existingParams = params.filter(
+                    (param) => param.name !== "category"
+                  );
+                  setParams([...existingParams, { name: "category", value }]);
+                } else {
+                  setParams([]);
+                }
+              }}
+            />
+          </div>
+          {/* sort by  */}
+          <div>
+            <Typography.Text strong>Sort By</Typography.Text>
+            <Select
+              size="large"
+              placeholder="Sort By..."
+              className="w-full mt-2"
+              options={sortOptions}
+              allowClear
+              loading={isFetching}
+              onChange={(value) => {
+                if (value) {
+                  const existingParams = params.filter(
+                    (param) => param.name !== "sort"
+                  );
+                  setParams([
+                    ...existingParams,
+                    { name: "sort", value },
+                    { name: "page", value: "1" },
+                  ]);
+                } else {
+                  setParams([]);
+                }
+              }}
+            />
+          </div>
+          {/* price range  */}
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <Typography.Text strong>Price Range</Typography.Text>
+              <Button
+                size="small"
+                onClick={() => {
+                  setPriceRange([0, 10000]);
+                  setParams(
+                    params.filter(
+                      (param) =>
+                        param.name !== "minPrice" && param.name !== "maxPrice"
+                    )
+                  );
+                }}
+              >
+                Clear
+              </Button>
+            </div>
+            <div className="mt-2">
+              <Slider
+                range
+                min={0}
+                max={10000}
+                step={100}
+                value={priceRange}
+                tooltip={{
+                  formatter: (value) => `${value}`,
+                }}
+                onChange={(value: number | number[]) => {
+                  if (Array.isArray(value) && value.length === 2) {
+                    const existingParams = params.filter(
+                      (param) =>
+                        param.name !== "minPrice" && param.name !== "maxPrice"
+                    );
+                    setPriceRange(value as [number, number]);
+                    setParams([
+                      ...existingParams,
+                      { name: "minPrice", value: value[0].toString() },
+                      { name: "maxPrice", value: value[1].toString() },
+                    ]);
+                  }
+                }}
+              />
+              <div className="flex justify-between mt-2">
+                <Typography.Text type="secondary">${0}</Typography.Text>
+                <Typography.Text type="secondary">${10000}+</Typography.Text>
+              </div>
+              <div className="flex gap-4 mt-4">
+                <div>
+                  <Typography.Text type="secondary">Min</Typography.Text>
+                  <Input
+                    size="middle"
+                    prefix="$"
+                    value={priceRange[0]}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (!isNaN(value)) {
+                        setPriceRange([value, priceRange[1]]);
+                        const existingParams = params.filter(
+                          (param) =>
+                            param.name !== "minPrice" &&
+                            param.name !== "maxPrice"
+                        );
+                        setParams([
+                          ...existingParams,
+                          { name: "minPrice", value: value.toString() },
+                          { name: "maxPrice", value: priceRange[1].toString() },
+                        ]);
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <Typography.Text type="secondary">Max</Typography.Text>
+                  <Input
+                    size="middle"
+                    prefix="$"
+                    value={priceRange[1]}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (!isNaN(value)) {
+                        setPriceRange([priceRange[0], value]);
+                        setParams([
+                          { name: "minPrice", value: priceRange[0].toString() },
+                          { name: "maxPrice", value: value.toString() },
+                        ]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* brand select  */}
+          <div>
+            <Typography.Text strong>Brand</Typography.Text>
+            <Select
+              size="large"
+              placeholder="Select Brand..."
+              className="w-full mt-2"
+              options={brands}
+              allowClear
+              loading={isFetching}
+              onChange={(value) => {
+                if (value) {
+                  const existingParams = params.filter(
+                    (param) => param.name !== "brand"
+                  );
+                  setParams([...existingParams, { name: "brand", value }]);
+                } else {
+                  setParams([]);
+                }
+              }}
+            />
+          </div>
+        </div>
+      </Drawer>
       {isFetching ? (
         <div className="flex justify-center items-center h-screen">
           <Spin size="large" />
@@ -99,9 +272,15 @@ export default function AllProducts() {
               current={productsData?.meta?.page}
               total={productsData?.meta?.totalDocuments}
               pageSize={productsData?.meta?.limit}
-              onChange={(newPage) =>
-                setParams([{ name: "page", value: newPage }])
-              }
+              onChange={(newPage) => {
+                const existingParams = params.filter(
+                  (param) => param.name !== "page"
+                );
+                setParams([
+                  ...existingParams,
+                  { name: "page", value: newPage.toString() },
+                ]);
+              }}
               showSizeChanger={false}
             />
           </div>
