@@ -86,7 +86,7 @@ export default function Events() {
                 >
                   {event.description}
                 </p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                <div className="flex flex-col gap-4 text-sm text-gray-500">
                   <div className="flex items-center">
                     <CalendarOutlined className="mr-2" />
                     {event.date}
