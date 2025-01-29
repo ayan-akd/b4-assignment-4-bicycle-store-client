@@ -25,10 +25,10 @@ const MainLayout = () => {
           </NavLink>
           <Navbar />
           {token ? (
-            <Button onClick={handleLogout}>Logout</Button>
+            <Button danger onClick={handleLogout}>Logout</Button>
           ) : (
             <NavLink to="/login">
-              <Button>Login</Button>
+              <Button type="primary">Login</Button>
             </NavLink>
           )}
         </div>
