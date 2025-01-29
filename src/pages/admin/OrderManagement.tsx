@@ -19,7 +19,7 @@ import { DollarCircleOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { EditOutlined } from "@ant-design/icons";
 import NotificationToast from "@/components/ui/NotificationToast";
-import { TResponse } from "@/types";
+import { TQueryParams, TResponse } from "@/types";
 import { Column, Pie } from "@ant-design/charts";
 
 const statusItems = [
@@ -52,7 +52,10 @@ type ChartDataItem = {
 
 export default function OrderManagement() {
   const [orderId, setOrderId] = useState("");
-  const { data: ordersData, isFetching } = useGetAllOrdersQuery(undefined);
+  const [params, setParams] = useState<TQueryParams[]>([]);
+  const { data: ordersData, isFetching } = useGetAllOrdersQuery([
+    ...params,
+  ]);
   const [updateStatus] = useUpdateOrderStatusMutation();
   const tableData = ordersData?.data?.map((order: TOrder) => ({
     key: order._id,
@@ -271,11 +274,22 @@ export default function OrderManagement() {
           dataSource={tableData}
           style={{ overflow: "auto" }}
           pagination={{
-            pageSize: 10,
+            current: ordersData?.meta?.page,
+            total: ordersData?.meta?.totalDocuments,
+            pageSize: ordersData?.meta?.limit,
+            onChange: (newPage, pageSize) => {
+              const existingParams = params.filter(
+                (param) => param.name !== "page" && param.name !== "limit"
+              );
+              setParams([
+                ...existingParams,
+                { name: "page", value: newPage.toString() },
+                { name: "limit", value: pageSize.toString() },
+              ]);
+            },
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} orders`,
+              `${range[0]}-${range[1]} of ${total} products`,
             showSizeChanger: true,
-            showQuickJumper: true,
           }}
           className="shadow-sm"
           bordered

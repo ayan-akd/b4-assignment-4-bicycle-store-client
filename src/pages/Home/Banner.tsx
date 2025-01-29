@@ -17,16 +17,19 @@ export default function Banner() {
   const images = [img1, img2, img3, img4, img5, img6, img7, img8];
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Carousel: {
-            arrowSize: 40,
-          },
-        },
-      }}
-    >
-      <div className="mx-auto max-w-7xl">
+    <div>
+      <ConfigProvider
+  theme={{
+    components: {
+      Carousel: {
+        arrowSize: 40,
+        colorBgContainer: "black", // Background color of arrows
+        colorText: "black", // Color of the arrow icons
+      },
+    },
+  }}
+>
+      <div className="mx-auto">
         <Carousel autoplay arrows draggable>
           {images.map((image, index) => (
             <div key={index} className="flex justify-center items-center">
@@ -34,11 +37,13 @@ export default function Banner() {
                 src={image}
                 alt={`bicycle-${index + 1}`}
                 style={contentStyle}
+                className=" w-[96%] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] object-cover"
               />
             </div>
           ))}
         </Carousel>
       </div>
     </ConfigProvider>
+    </div>
   );
 }

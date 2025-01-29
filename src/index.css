@@ -149,3 +149,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Change carousel arrow color */
+.ant-carousel .slick-prev,
+.ant-carousel .slick-next {
+  color: black !important; /* Change arrow button color */
+}
+
+/* Change carousel arrow background */
+.ant-carousel .slick-prev::before,
+.ant-carousel .slick-next::before {
+  color: black !important; /* Change arrow icon color */
+  opacity: 1 !important; /* Ensure full visibility */
+}

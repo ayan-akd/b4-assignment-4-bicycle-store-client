@@ -4,7 +4,7 @@ import {
   useGetAllUsersQuery,
   useUpdateUserMutation,
 } from "@/redux/features/admin/userManagement.api";
-import { TResponse, TUserData } from "@/types";
+import { TQueryParams, TResponse, TUserData } from "@/types";
 import {
   Button,
   Dropdown,
@@ -32,7 +32,8 @@ const statusItems = [
 
 export default function UserManagement() {
   const [userId, setUserId] = useState("");
-  const { data: usersData, isFetching } = useGetAllUsersQuery(undefined);
+  const [params, setParams] = useState<TQueryParams[]>([]);
+  const { data: usersData, isFetching } = useGetAllUsersQuery([...params]);
   const [updateUser] = useUpdateUserMutation();
 
   const tableData = usersData?.data?.map((user: TUserData) => ({
@@ -177,11 +178,22 @@ export default function UserManagement() {
           dataSource={tableData}
           style={{ overflow: "auto" }}
           pagination={{
-            pageSize: 10,
+            current: usersData?.meta?.page,
+            total: usersData?.meta?.totalDocuments,
+            pageSize: usersData?.meta?.limit,
+            onChange: (newPage, pageSize) => {
+              const existingParams = params.filter(
+                (param) => param.name !== "page" && param.name !== "limit"
+              );
+              setParams([
+                ...existingParams,
+                { name: "page", value: newPage.toString() },
+                { name: "limit", value: pageSize.toString() },
+              ]);
+            },
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} users`,
+              `${range[0]}-${range[1]} of ${total} products`,
             showSizeChanger: true,
-            showQuickJumper: true,
           }}
           className="shadow-sm"
           bordered
