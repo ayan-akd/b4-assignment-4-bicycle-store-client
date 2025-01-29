@@ -46,7 +46,7 @@ export default function Sidebar() {
   return (
     <Sider
       translate="yes"
-      breakpoint="md"
+      breakpoint="lg"
       collapsedWidth="0"
       trigger={null}
       collapsible
@@ -65,7 +65,7 @@ export default function Sidebar() {
         <div className="md:text-xl font-bold my-5 text-white">Pedal Paradise</div>
       </Link>
       <div
-        className="block md:hidden z-50"
+        className="block lg:hidden z-50"
         style={{
           position: "absolute",
           top: "4%",

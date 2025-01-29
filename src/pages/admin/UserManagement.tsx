@@ -175,6 +175,7 @@ export default function UserManagement() {
         <Table<TUserData>
           columns={columns}
           dataSource={tableData}
+          style={{ overflow: "auto" }}
           pagination={{
             pageSize: 10,
             showTotal: (total, range) =>

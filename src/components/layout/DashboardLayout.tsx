@@ -22,7 +22,7 @@ const DashboardLayout = () => {
       <Layout style={{ minHeight: "100%" }}>
         <Sidebar />
         <Layout>
-          <Header className="pl-10 pr-2 md:pl-0 ">
+          <Header className="pl-10 pr-2 lg:pl-0 ">
             <div className="flex justify-around items-center gap-2">
               <Navbar />
               {token ? (
