@@ -1,4 +1,7 @@
-import { useGetAllProductsQuery } from "@/redux/features/admin/productManagement.api";
+import {
+  useGetAllProductsQuery,
+  useGetBrandsQuery,
+} from "@/redux/features/admin/productManagement.api";
 import { TProduct, TQueryParams } from "@/types";
 import { useState } from "react";
 import ProductCard from "../admin/ProductCard";
@@ -41,9 +44,10 @@ export default function AllProducts() {
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
   ]);
-  const brands = [
-    ...new Set(productsData?.data?.map((product: TProduct) => product.brand)),
-  ].map((brand) => ({
+
+  const { data: brandsData } = useGetBrandsQuery({ skip: !isFetching });
+
+  const brands = brandsData?.data.map((brand: string) => ({
     value: brand,
     label: brand,
   }));
@@ -85,7 +89,7 @@ export default function AllProducts() {
         width={320}
       >
         <div className="flex flex-col gap-5">
-          {/* catergory  */}
+          {/* category  */}
           <div>
             <Typography.Text strong>Category</Typography.Text>
             <Select

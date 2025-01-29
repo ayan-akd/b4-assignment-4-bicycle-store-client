@@ -11,8 +11,8 @@ import { RootState } from "../store";
 import { logOut, setUser } from "../features/auth/authSlice";
 import NotificationToast from "@/components/ui/NotificationToast";
 
-// const baseUrl = "http://localhost:5000/api/";
-const baseUrl = "https://pedal-paradise-server.vercel.app/api/";
+const baseUrl = "http://localhost:5000/api/";
+// const baseUrl = "https://pedal-paradise-server.vercel.app/api/";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
@@ -70,5 +70,5 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
-  tagTypes: ["users", "products", "orders", "product", "user", "order"],
+  tagTypes: ["users", "products", "orders", "product", "user", "order", "brands"],
 });

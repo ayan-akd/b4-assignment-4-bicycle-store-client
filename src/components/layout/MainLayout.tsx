@@ -21,7 +21,7 @@ const MainLayout = () => {
         <div className="flex justify-around items-center gap-2">
           <NavLink className="flex items-center gap-1" to="/">
           <img src={logo} alt="logo" className="w-10 h-10 bg-white rounded-full" />
-            <div className="text-xl font-bold text-white">Pedal Paradise</div>
+            <div className="md:text-xl font-bold text-white">Pedal Paradise</div>
           </NavLink>
           <Navbar />
           {token ? (

@@ -150,7 +150,7 @@ export default function Checkout() {
 
           <Row gutter={16}>
             <Col span={24}>
-              <CustomTextArea name="address" label="User Address" />
+              <CustomTextArea name="address" label="User Address" placeholder="Enter your address here...."/>
             </Col>
           </Row>
 

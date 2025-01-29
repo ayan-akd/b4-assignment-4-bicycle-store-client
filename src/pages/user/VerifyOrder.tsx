@@ -1,12 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button, Empty, QRCode, Spin, Tag, Typography } from "antd";
 import { useVerifyOrderQuery } from "@/redux/features/order/orderManagement.api";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 interface OrderData {
   id: number;
@@ -44,6 +39,7 @@ interface OrderData {
 
 export default function VerifyOrder() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { data, isFetching } = useVerifyOrderQuery(
     searchParams.get("order_id"),
     {
@@ -78,7 +74,15 @@ export default function VerifyOrder() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Order Verification</h1>
+      <div className="flex items-center justify-between mb-6 px-5">
+        <h1 className="text-3xl font-bold">Order Verification</h1>
+        {(orderData?.bank_status === "Failed" ||
+          orderData?.bank_status === "Cancel") && (
+          <Button onClick={() => navigate(-1)} type="primary">
+            Try again?
+          </Button>
+        )}
+      </div>
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
