@@ -71,10 +71,11 @@ export default function Login() {
     });
     const userInfo = {
       ...data,
-      role: "user",
+      role: "customer",
     };
     try {
       const res = (await register(userInfo)) as TResponse<any>;
+      console.log(res);
       if (res.data) {
         NotificationToast({
           message: "Registration successful. Please login.",
