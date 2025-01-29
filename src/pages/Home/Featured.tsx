@@ -19,7 +19,7 @@ export default function Featured() {
       ) : (
         <div className="md:flex flex-wrap gap-5 justify-center space-y-4 md:space-y-0 p-4 items-center">
           {featuredProducts?.map((product: TProduct) => (
-            <ProductCard key={product?._id} product={product} />
+            <ProductCard key={product?._id} product={product} management={true} />
           ))}
         </div>
       )}
