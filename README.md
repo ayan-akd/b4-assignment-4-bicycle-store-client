@@ -1,116 +1,224 @@
-# Bicycle Store Server
+# Pedal Paradise Frontend
 
-A backend server built using **Node.js**, **Express**, and **MongoDB**. This API handles bicycle inventory, orders, and revenue calculations. The application supports CRUD operations for bicycles, manages orders with automatic stock updates, and provides a comprehensive error handling mechanism.
+A modern, responsive web application built using  **React**, **Redux**, **TypeScript**, **Ant Design**, and **Tailwind CSS**. This frontend application provides an intuitive interface for the Pedal Paradise bicycle store, featuring a robust shopping experience and comprehensive admin dashboard.
+
+## 🌐 Live Demo
+
+- Frontend: [Pedal Paradise Frontend](https://pedal-paradise-client.vercel.app/)
+- Backend API: [Pedal Paradise API](https://pedal-paradise-server.vercel.app)
+
+## 🔑 Demo Credentials
+
+To explore the admin features, you can use these demo credentials:
+
+```
+Email: admin@mail.com
+Password: admin123
+```
+
+**Note:** This is a demo account. Please be mindful when testing the admin features.
 
 ## 📋 Features
 
-- **Store Bicycle Data**: Store and manage bicycle details in the database.
-- **Create, Read, Update, and Delete Bicycle Details**: Fully manage bicycle records via API endpoints.
-- **Store Orders**: Create orders and automatically update the stock quantity.
-- **Calculate Total Revenue**: Calculate the total revenue generated from all orders.
-- **Search Bicycles**: Retrieve bicycles based on query search terms.
-- **Validate User Inputs**: Ensure data integrity using **Zod** for input validation.
-- **Error Handling**: Provides meaningful error messages for a better user experience.
-- **TypeScript Integration**: Type annotations for reliability and maintainability of the application.
-- **MongoDB Integration**: Use **Mongoose** to interact with MongoDB for efficient data handling and validation.
-- **Code Linting & Formatting**: Enforce code quality with **ESLint** and **Prettier** for consistent code style.
+- **Authentication System**
+
+  - JWT-based authentication with secure token management
+  - Protected routes based on user roles (Admin/Customer)
+  - Persistent login state using Redux Persist
+
+- **Shopping Experience**
+
+  - Interactive product catalog
+  - Secure checkout process
+  - Secure SSL payment gateway integration
+  - Payment status tracking
+  - Order history and tracking system
+
+- **Payment Features**
+  - Secure payment gateway integration
+  - Multiple payment methods
+  - Payment verification system
+  - Transaction history
+  - Automatic order updates
+
+- **User Dashboard**
+
+  - Order history
+  - Profile management
+  - Password change functionality
+
+- **Admin Features**
+  - Sales analytics with Ant Design Charts
+  - Order and payment management system
+  - Transaction history tracking
+  - Product inventory management
+  - User management interface
+
+## 🛠️ Tech Stack
+
+- **Core**
+
+  - Vite 6.0
+  - React 18.3
+  - TypeScript 5.6
+  - React Router DOM 7.1
+
+- **State Management**
+
+  - Redux Toolkit
+  - RTK Query
+  - Redux Persist
+
+- **UI Components**
+
+  - Ant Design
+  - Radix UI Primitives
+  - Ant Design Charts
+  - Tailwind CSS
+  - Framer Motion
+  - Lucide React Icons
+  - React Icons
+
+- **Form Handling**
+
+  - React Hook Form
+  - Zod validation
+  - Hookform Resolvers
+
+- **Development Tools**
+  - ESLint
+  - TypeScript ESLint
+  - Autoprefixer
+  - PostCSS
 
 ## 🚀 Getting Started
 
-Follow these steps to set up the project locally:
-
 ### Prerequisites
 
-Ensure you have the following installed:
-
-- **Node.js** (>=14.x.x)
-- **MongoDB** (local or hosted, e.g., MongoDB Atlas)
-- **Git**
-- **TypeScript** (Optional: If you prefer to install globally)
+- Node.js (>=14.x.x)
+- npm or yarn
+- Git
 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/yourusername/bicycle-store-server.git
-   cd bicycle-store-server
-    ```
+   git clone https://github.com/ayan-akd/b4-assignment-4-bicycle-store-client.git
+   ```
+
 2. Install dependencies:
 
    ```bash
-   cd bicycle-store-server
+   cd b4-assignment-4-bicycle-store-client
    npm install
    ```
 
-3. Create a .env file in the root directory and add your MongoDB connection URI:
-
+3. Start the development server:
    ```bash
-   MONGODB_URI=your_mongodb_connection_string
+   npm run dev
    ```
 
-4. Start the development server:
+The application will be available at `http://localhost:5173`
 
-   ```bash
-   npm run start:dev
-   ```
+## 📜 Available Scripts
 
-The server will run at http://localhost:5000 (or another port if you configure it differently).
+- `npm run dev` - Start the development server
+- `npm run build` - Build for production
+- `npm run lint` - Run ESLint
+- `npm run preview` - Preview production build
 
-## 🛠️ Scripts
+## 📁 Project Structure
 
-The project includes several npm scripts for development and production:
+```
+src/
+├── components/
+│   ├── ui/               # Reusable UI components
+│   ├── forms/            # Form components
+│   ├── layouts/          # Layout components
+│   └── features/         # Feature-specific components
+├── hooks/                # Custom hooks
+├── lib/                  # Utility functions
+├── pages/                # Page components
+├── services/            # API services
+├── store/               # Redux store
+│   ├── api/             # RTK Query API slices
+│   └── features/        # Redux slices
+├── types/               # TypeScript types
+└── utils/               # Helper functions
+```
 
-- `npm run start`: Starts the application in production mode.
-- `npm run start:dev`: Starts the application in development mode with live reloading using `ts-node-dev`.
-- `npm run build`: Builds the application for production.
-- `npm run dev`: Watches for changes and compiles TypeScript files automatically.
-- `npm run lint`: Lints the codebase using **ESLint**.
-- `npm run lint:fix`: Automatically fixes linting errors.
-- `npm run format`: Formats the codebase using **Prettier**.
-- `npm run format:fix`: Automatically fixes formatting issues with **Prettier**.
+## 🔐 Authentication
 
-## API Endpoints
+The application uses JWT-based authentication with token persistence. Protected routes are implemented using React Router and Redux state management.
 
-### Products (Bicycles)
+## 🎨 Styling
 
-- **GET /api/products**: Retrieve a list of all bicycles.
-- **GET /api/products/:id**: Retrieve a single bicycle by its ID.
-- **POST /api/products**: Add a new bicycle to the inventory.
-- **PUT /api/products/:id**: Update the details of a specific bicycle.
-- **DELETE /api/products/:id**: Delete a specific bicycle from the inventory.
+- Tailwind CSS for utility-first styling
+- Class Variance Authority for component variants
+- Tailwind Animate for animations
 
-### Orders
+## 🌐 API Integration
 
-- **POST /api/orders**: Create a new order. Stock will be updated automatically.
-- **GET /api/orders//revenue**: Get the total revenue generated from all orders.
+- RTK Query for data fetching and caching
+- Type-safe API calls with TypeScript
 
-### Revenue
+## 💳 Payment Integration
 
-- **GET /api/revenue**: Get the total revenue generated from all orders.
+- Secure payment gateway with ShurjoPay
+- Real-time payment status verification
+- Payment history tracking
+- Multiple payment method support
+- Automatic order status updates after payment
 
-## Technologies Used
+## 📱 Responsive Design
 
-- **Node.js**: JavaScript runtime for building the server.
-- **Express**: Web framework for Node.js for building the API.
-- **MongoDB**: NoSQL database for storing data.
-- **Mongoose**: ODM for MongoDB to facilitate data handling and validation.
-- **TypeScript**: Type-safe JavaScript for a more reliable and maintainable codebase.
-- **Zod**: Schema validation library to ensure input data integrity.
-- **ESLint**: Linting tool to enforce consistent coding styles.
-- **Prettier**: Code formatter to maintain consistent formatting across the codebase.
+- Mobile-first approach
+- Responsive layouts for all screen sizes
+- Touch-friendly interface elements
 
-## Project Live Link
+## 🔄 State Management
 
-[Live API](https://bicycle-store-server-virid.vercel.app/api/products)
+- Redux Toolkit for global state
+- RTK Query for server state
+- Redux Persist for state persistence
+- Local state with React hooks
 
-## License
+## 🧪 Code Quality
+
+- ESLint for code linting
+- TypeScript for type safety
+- Consistent code formatting
+- Modern React best practices
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## 🔗 Related Projects
 
-- Thanks to the **MongoDB** team for providing a reliable database solution.
-- Special thanks to **Zod**, **Prettier**, and **ESLint** for enhancing code quality and maintainability.
+- [Pedal Paradise Backend](https://github.com/ayan-akd/b4-assignment-4-bicycle-store-server)
 
-Feel free to clone and contribute to this project. If you find any bugs or have suggestions for improvements, feel free to open an issue or pull request!
-Happy coding! 🚲🛠️
+## 🙏 Acknowledgments
+
+- Thanks to all the open-source libraries and tools used in this project
+- Special thanks to the React and Vite communities
+- Ant Design team for their excellent component library
+- Radix UI team for their accessible primitives
+
+For more information about the technologies used, please refer to their respective documentation:
+
+- [Vite](https://vitejs.dev/)
+- [React](https://reactjs.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Ant Design](https://ant.design/)
+- [Radix UI](https://www.radix-ui.com/)
