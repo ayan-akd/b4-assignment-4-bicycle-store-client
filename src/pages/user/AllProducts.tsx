@@ -40,7 +40,6 @@ export default function AllProducts() {
 
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
-    { name: "limit", value: "8" },
   ]);
   const brands = [
     ...new Set(productsData?.data?.map((product: TProduct) => product.brand)),
@@ -285,47 +284,51 @@ export default function AllProducts() {
               current={productsData?.meta?.page}
               total={productsData?.meta?.totalDocuments}
               pageSize={productsData?.meta?.limit}
-              onChange={(newPage) => {
+              onChange={(newPage, pageSize) => {
                 const existingParams = params.filter(
-                  (param) => param.name !== "page"
+                  (param) => param.name !== "page" && param.name !== "limit"
                 );
                 setParams([
                   ...existingParams,
                   { name: "page", value: newPage.toString() },
+                  { name: "limit", value: pageSize.toString() },
                 ]);
               }}
-              showSizeChanger={false}
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} products`
+              }
+              showSizeChanger={true}
             />
           </div>
         </>
       )}
       {compareItems.length > 0 && (
-          <Badge count={compareItems.length} className="fixed bottom-8 right-8">
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<MdCompareArrows />}
-              onClick={() => setDrawerVisible(true)}
-              size="large"
-            />
-          </Badge>
-        )}
+        <Badge count={compareItems.length} className="fixed bottom-8 right-8">
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<MdCompareArrows />}
+            onClick={() => setDrawerVisible(true)}
+            size="large"
+          />
+        </Badge>
+      )}
       <Drawer
-          title={
-            <div className="flex justify-between items-center">
-              <span>Compare Bicycles</span>
-              <Button danger onClick={() => setCompareItems([])}>
-                Clear All
-              </Button>
-            </div>
-          }
+        title={
+          <div className="flex justify-between items-center">
+            <span>Compare Bicycles</span>
+            <Button danger onClick={() => setCompareItems([])}>
+              Clear All
+            </Button>
+          </div>
+        }
         placement="right"
         width={720}
         open={drawerVisible}
         onClose={() => setDrawerVisible(false)}
       >
         <Table
-          dataSource={compareItems.map(item => ({...item, key: item._id}))}
+          dataSource={compareItems.map((item) => ({ ...item, key: item._id }))}
           style={{ overflow: "auto" }}
           columns={[
             {
@@ -337,8 +340,7 @@ export default function AllProducts() {
               title: "Name",
               dataIndex: "name",
               render: (text) => (
-                <Typography.Text 
-                 strong>{text}</Typography.Text>
+                <Typography.Text strong>{text}</Typography.Text>
               ),
             },
             {

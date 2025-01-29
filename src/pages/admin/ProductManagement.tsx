@@ -26,7 +26,6 @@ export default function ProductManagement() {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const { data: productsData, isFetching } = useGetAllProductsQuery([
     ...params,
-    { name: "limit", value: "10" },
   ]);
   const [deleteProduct] = useDeleteProductMutation();
   const handleDelete = async (id: string) => {
