@@ -55,7 +55,7 @@ export default function CustomFooter() {
           </nav>
           <div className="flex justify-center mt-8">
             <div className="text-gray-500 text-center">
-              <p>Email: info@bicyclestore.com</p>
+              <p>Email: info@pedalparadise.com</p>
               <p>Phone: +1 (555) 123-4567</p>
               <p>Address: 123 Bicycle Street, Cycling City, CC 12345</p>
               <p>Business Hours: Mon-Sat 9AM-6PM</p>
